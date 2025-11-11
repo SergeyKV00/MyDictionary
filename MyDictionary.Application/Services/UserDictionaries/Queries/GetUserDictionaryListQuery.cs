@@ -3,19 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Common;
 using MyDictionary.Application.Common.Mappings;
 using MyDictionary.Application.Interfaces;
-using MyDictionary.Application.UserDictionaries.Models;
+using MyDictionary.Application.Services.UserDictionaries.Models;
 
-namespace MyDictionary.Application.UserDictionaries.Queries
+namespace MyDictionary.Application.Services.UserDictionaries.Queries;
+
+public record GetUserDictionaryListQuery(Guid UserId) : IRequest<ListModel<UserDictionaryVm>>
 {
-    public class GetUserDictionaryListQueryHandler
+    public class Handler(IAppDbContext appDbContext) 
         : IRequestHandler<GetUserDictionaryListQuery, ListModel<UserDictionaryVm>>
     {
-        private readonly IAppDbContext appDbContext;
-
-        public GetUserDictionaryListQueryHandler(IAppDbContext appDbContext)
-            => this.appDbContext = appDbContext;
-        
-        public async Task<ListModel<UserDictionaryVm>> Handle(GetUserDictionaryListQuery request, 
+        public async Task<ListModel<UserDictionaryVm>> Handle(GetUserDictionaryListQuery request,
             CancellationToken cancellationToken)
         {
             var items = await appDbContext.UserDictionaries

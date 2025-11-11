@@ -4,24 +4,23 @@ using Microsoft.Extensions.DependencyInjection;
 using MyDictionary.Application.Interfaces;
 using MyDictionary.Infrastructure.Persistence;
 
-namespace MyDictionary.Infrastructure
+namespace MyDictionary.Infrastructure;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+        IConfiguration configuration)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
-            IConfiguration configuration)
+        var connectionString = configuration["ConnectionString"];
+        services.AddDbContext<AppDbContext>(options =>
         {
-            var connectionString = configuration["DbConnection"];
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlite(connectionString, b =>
-                    b.MigrationsAssembly("MyDictionary.Infrastructure"));
-            });       
+            options.UseSqlServer(connectionString, b =>
+                b.MigrationsAssembly("MyDictionary.Infrastructure"));
+        });       
 
-            services.AddScoped<IAppDbContext>(provider => 
-                provider.GetRequiredService<AppDbContext>());
+        services.AddScoped<IAppDbContext>(provider => 
+            provider.GetRequiredService<AppDbContext>());
 
-            return services;
-        }
+        return services;
     }
 }

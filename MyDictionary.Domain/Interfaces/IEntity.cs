@@ -1,7 +1,6 @@
-﻿namespace MyDictionary.Domain.Interfaces
+﻿namespace MyDictionary.Domain.Interfaces;
+
+public interface IEntity
 {
-    public interface IEntity<TIdentifier>
-    {
-        TIdentifier Id { get; set; }
-    }
+    Guid Id { get; set; }
 }

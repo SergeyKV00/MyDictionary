@@ -1,9 +1,8 @@
 ﻿using MyDictionary.Domain.Interfaces;
 
-namespace MyDictionary.Domain.Common
+namespace MyDictionary.Domain.Common;
+
+public abstract class EntityBase : IEntity
 {
-    public class EntityBase : IEntity<Guid>
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

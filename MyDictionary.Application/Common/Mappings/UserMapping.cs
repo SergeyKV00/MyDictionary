@@ -1,17 +1,16 @@
-﻿using MyDictionary.Application.Users.Models;
+﻿using MyDictionary.Application.Services.Users.Models;
 using MyDictionary.Domain.Entities;
 
-namespace MyDictionary.Application.Common.Mappings
+namespace MyDictionary.Application.Common.Mappings;
+
+public static class UserMapping
 {
-    public static class UserMapping
+    public static UserVm ToView(this User user)
     {
-        public static UserVm ToView(this User user)
+        return new()
         {
-            return new()
-            {
-                Id = user.Id,
-                UserName = user.UserName
-            };
-        }
+            Id = user.Id,
+            UserName = user.UserName
+        };
     }
 }

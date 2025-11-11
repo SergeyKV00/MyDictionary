@@ -1,7 +1,6 @@
-﻿namespace MyDictionary.Application.Common
+﻿namespace MyDictionary.Application.Common;
+
+public abstract class ModelBase
 {
-    public class ModelBase
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }
