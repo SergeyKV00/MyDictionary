@@ -1,9 +1,10 @@
 ﻿using MyDictionary.Domain.Common;
 using MyDictionary.Domain.Interfaces;
+using MyDictionary.Domain.Users;
 
-namespace MyDictionary.Domain.Entities;
+namespace MyDictionary.Domain.UserDictionaries;
 
-public class UserDictionary : EntityBase, IAuditable
+public class UserDictionary : Entity, IAuditable
 {
     public Guid UserId { get; set; }
     public User User { get; set; }

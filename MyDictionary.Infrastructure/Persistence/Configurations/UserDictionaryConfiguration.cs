@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyDictionary.Domain.Entities;
+using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Infrastructure.Persistence.Abstracts;
 
 namespace MyDictionary.Infrastructure.Persistence.Configurations;
 
-public class UserDictionaryConfiguration : EntityBaseConfiguration<UserDictionary>
+public class UserDictionaryConfiguration : EntityConfiguration<UserDictionary>
 {
     public override void Configure(EntityTypeBuilder<UserDictionary> builder)
     {

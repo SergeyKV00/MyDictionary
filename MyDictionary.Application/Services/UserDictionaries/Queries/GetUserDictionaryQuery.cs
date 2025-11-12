@@ -1,9 +1,11 @@
-﻿using MediatR;
-using MyDictionary.Application.Services.UserDictionaries.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MyDictionary.Application.Services.UserDictionaries.Queries;
 
-public class GetUserDictionaryQuery : IRequest<UserDictionaryDetailsVm>
+public record GetUserDictionaryQuery
 {
-    public Guid Id { get; set; }
 }

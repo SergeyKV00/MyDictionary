@@ -7,13 +7,13 @@ using MyDictionary.Application.Services.UserDictionaries.Models;
 
 namespace MyDictionary.Application.Services.UserDictionaries.Queries;
 
-public class GetUserDictionaryQueryHandler : IRequestHandler<GetUserDictionaryQuery, UserDictionaryDetailsVm>
+public class GetUserDictionaryQueryHandlerOld : IRequestHandler<GetUserDictionaryQueryOld, UserDictionaryDetailsVm>
 {
     private readonly IAppDbContext appDbContext;
-    public GetUserDictionaryQueryHandler(IAppDbContext appDbContext)
+    public GetUserDictionaryQueryHandlerOld(IAppDbContext appDbContext)
         => this.appDbContext = appDbContext;
 
-    public async Task<UserDictionaryDetailsVm> Handle(GetUserDictionaryQuery request,
+    public async Task<UserDictionaryDetailsVm> Handle(GetUserDictionaryQueryOld request,
         CancellationToken cancellationToken)
     {
         var dictionary = await appDbContext.UserDictionaries

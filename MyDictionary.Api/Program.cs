@@ -6,9 +6,12 @@ using MyDictionary.Infrastructure.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-builder.Services.AddApplication();
 builder.Services.AddInfrastructure(config);
+builder.Services.AddApplication();
 builder.Services.AddControllers();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddCors(options =>
 {
@@ -29,7 +32,8 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 }
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseExceptionHandler();
+//app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowClient");
 

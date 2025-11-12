@@ -16,7 +16,9 @@ public record GetUserDictionaryListQuery(Guid UserId) : IRequest<ListModel<UserD
             CancellationToken cancellationToken)
         {
             var items = await appDbContext.UserDictionaries
-                .Where(d => d.UserId == request.UserId)
+                .Where(d => 
+                    d.UserId == request.UserId
+                    && d.Deleted == null)
                 .ToListAsync(cancellationToken);
 
             return new ListModel<UserDictionaryVm>

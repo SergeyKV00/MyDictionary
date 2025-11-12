@@ -2,7 +2,7 @@
 
 namespace MyDictionary.Domain.Common;
 
-public abstract class EntityBase : IEntity
+public abstract class Entity : IEntity
 {
     public Guid Id { get; set; }
 }

@@ -1,5 +1,5 @@
 ﻿using MyDictionary.Application.Services.UserDictionaries.Models;
-using MyDictionary.Domain.Entities;
+using MyDictionary.Domain.UserDictionaries;
 
 namespace MyDictionary.Application.Common.Mappings;
 

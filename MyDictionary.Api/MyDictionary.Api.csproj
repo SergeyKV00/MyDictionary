@@ -19,8 +19,4 @@
     <ProjectReference Include="..\MyDictionary.Infrastructure\MyDictionary.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\UserDictionary\" />
-  </ItemGroup>
-
 </Project>

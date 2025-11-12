@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using MyDictionary.Domain.Interfaces;
 
-namespace MyDictionary.Infrastructure.Persistence.Configurations;
+namespace MyDictionary.Infrastructure.Persistence.Abstracts;
 
-public class EntityBaseConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
+public class EntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity>
     where TEntity : class, IEntity
 {
     public virtual void Configure(EntityTypeBuilder<TEntity> builder)

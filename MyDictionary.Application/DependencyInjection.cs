@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MyDictionary.Application.Common.Behaviors;
+using MyDictionary.Domain.UserDictionaries;
 using System.Reflection;
 
 namespace MyDictionary.Application
@@ -10,6 +11,8 @@ namespace MyDictionary.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddTransient<IUserDictionaryService, UserDictionaryService>();
+
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

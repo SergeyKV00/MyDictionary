@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Interfaces;
-using MyDictionary.Domain.Entities;
 using MyDictionary.Domain.Interfaces;
+using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Domain.Users;
 using System.Reflection;
 
 namespace MyDictionary.Infrastructure.Persistence;

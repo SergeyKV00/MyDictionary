@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyDictionary.Domain.Entities;
+using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Domain.Users;
 
 namespace MyDictionary.Application.Interfaces;
 

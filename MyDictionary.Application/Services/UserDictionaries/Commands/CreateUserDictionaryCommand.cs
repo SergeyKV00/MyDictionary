@@ -1,38 +1,44 @@
 ﻿using FluentValidation;
-using MediatR;
 using MyDictionary.Application.Interfaces;
-using MyDictionary.Domain.Entities;
+using MyDictionary.Domain.Common;
+using MyDictionary.Domain.UserDictionaries;
 
 namespace MyDictionary.Application.Services.UserDictionaries.Commands;
 
-public record CreateUserDictionaryCommand(Guid UserId, string Name) : IRequest<Guid>
+public record CreateUserDictionaryCommand(Guid UserId, string Name) : ICommand<Guid>;
+
+internal class CreateUserDictionaryCommandHandler(
+    IAppDbContext appDbContext,
+    IUserDictionaryService service
+)
+        : ICommandHandler<CreateUserDictionaryCommand, Guid>
 {
-    public class Handler(IAppDbContext appDbContext) 
-        : IRequestHandler<CreateUserDictionaryCommand, Guid>
+    public async Task<Result<Guid>> Handle(CreateUserDictionaryCommand command, 
+        CancellationToken cancellation)
     {
-        public async Task<Guid> Handle(CreateUserDictionaryCommand request, 
-            CancellationToken cancellationToken)
+        var isExists = await service.ExistsAsync(command.UserId, command.Name, cancellation);
+        if (isExists)
+            return UserDictionaryErrors.AlReadyExists(command.Name);
+
+        var dictionary = new UserDictionary()
         {
-            var dictionary = new UserDictionary()
-            {
-                UserId = request.UserId,
-                Name = request.Name
-            };
+            UserId = command.UserId,
+            Name = command.Name
+        };
 
-            await appDbContext.UserDictionaries.AddAsync(dictionary, cancellationToken);
-            await appDbContext.SaveChangesAsync(cancellationToken);
+        await appDbContext.UserDictionaries.AddAsync(dictionary, cancellation);
+        await appDbContext.SaveChangesAsync(cancellation);
 
-            return dictionary.Id;
-        }
+        return dictionary.Id;
     }
+}
 
-    public class Validator : AbstractValidator<CreateUserDictionaryCommand>
+internal class CreateUserDictionaryCommandValidator 
+    : AbstractValidator<CreateUserDictionaryCommand>
+{
+    public CreateUserDictionaryCommandValidator()
     {
-        public Validator()
-        {
-            RuleFor(command => command.UserId).NotEqual(Guid.Empty);
-            RuleFor(command => command.Name).NotEmpty();
-        }
+        RuleFor(command => command.UserId).NotEqual(Guid.Empty);
+        RuleFor(command => command.Name).NotEmpty();
     }
-
 }

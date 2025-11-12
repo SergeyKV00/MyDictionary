@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MyDictionary.Application.Interfaces;
-using MyDictionary.Domain.Entities;
+using MyDictionary.Domain.Users;
 
 namespace MyDictionary.Application.Services.Users.Commands;
 
