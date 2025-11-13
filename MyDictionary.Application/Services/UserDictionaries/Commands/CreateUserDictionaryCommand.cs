@@ -33,7 +33,7 @@ internal class CreateUserDictionaryCommandHandler(
     }
 }
 
-internal class CreateUserDictionaryCommandValidator 
+public class CreateUserDictionaryCommandValidator 
     : AbstractValidator<CreateUserDictionaryCommand>
 {
     public CreateUserDictionaryCommandValidator()

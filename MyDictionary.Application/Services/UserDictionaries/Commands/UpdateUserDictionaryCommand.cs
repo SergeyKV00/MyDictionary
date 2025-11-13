@@ -47,7 +47,7 @@ internal class UpdateUserDictionaryCommandHandler(
     }
 }
 
-internal class UpdateUserDictionaryCommandValidator : AbstractValidator<UpdateUserDictionaryCommand>
+public class UpdateUserDictionaryCommandValidator : AbstractValidator<UpdateUserDictionaryCommand>
 {
     public UpdateUserDictionaryCommandValidator()
     {

@@ -16,7 +16,7 @@ public class UserDictionaryConfiguration : EntityConfiguration<UserDictionary>
             .IsRequired();
 
         builder.HasOne(x => x.User)
-            .WithMany(u => u.UserDictionaries)
+            .WithMany(u => u.Dictionaries)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
     }

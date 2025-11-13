@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MyDictionary.Application.Common.Exceptions;
 using MyDictionary.Application.Common.Mappings;
 using MyDictionary.Application.Interfaces;
 using MyDictionary.Application.Services.UserDictionaries.Models;
 
 namespace MyDictionary.Application.Services.UserDictionaries.Queries;
 
+// TODO
 public class GetUserDictionaryQueryHandlerOld : IRequestHandler<GetUserDictionaryQueryOld, UserDictionaryDetailsVm>
 {
     private readonly IAppDbContext appDbContext;
@@ -22,7 +22,7 @@ public class GetUserDictionaryQueryHandlerOld : IRequestHandler<GetUserDictionar
             );
 
         if (dictionary == null)
-            throw new NotFoundExceptions(nameof(dictionary), request.Id);
+            throw new Exception(nameof(dictionary));
 
         return dictionary.ToDetailsView();
     }

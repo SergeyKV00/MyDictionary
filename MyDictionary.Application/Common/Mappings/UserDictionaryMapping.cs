@@ -3,6 +3,7 @@ using MyDictionary.Domain.UserDictionaries;
 
 namespace MyDictionary.Application.Common.Mappings;
 
+//TODO Move to Api
 public static class UserDictionaryMapping
 {
     public static UserDictionaryVm ToView(this UserDictionary entity)

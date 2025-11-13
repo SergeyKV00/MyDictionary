@@ -12,5 +12,5 @@ public class User : Entity, IAuditable
     public DateTime Created { get; set; }
     public DateTime? Deleted { get; set; }
 
-    public ICollection<UserDictionary> UserDictionaries { get; set; } = [];
+    public ICollection<UserDictionary> Dictionaries { get; set; } = [];
 }

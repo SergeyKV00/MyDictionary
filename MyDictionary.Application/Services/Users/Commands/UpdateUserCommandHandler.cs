@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MyDictionary.Application.Common.Exceptions;
 using MyDictionary.Application.Interfaces;
 
 namespace MyDictionary.Application.Services.Users.Commands;
 
+// TODO
 public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
 {
     private readonly IAppDbContext appDbContext;
@@ -18,7 +18,7 @@ public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand>
         );
 
         if (user == null)
-            throw new NotFoundExceptions(nameof(user), request.Id);
+            throw new Exception(nameof(user));
 
         user.UserName = request.UserName;
         user.Email = request.Email;

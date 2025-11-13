@@ -2,6 +2,7 @@
 using MyDictionary.Application.Interfaces;
 using MyDictionary.Domain.Interfaces;
 using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Domain.UserDictionaryItems;
 using MyDictionary.Domain.Users;
 using System.Reflection;
 
@@ -11,6 +12,7 @@ public class AppDbContext : DbContext, IAppDbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<UserDictionary> UserDictionaries { get; set; }
+    public DbSet<DictionaryItem> DictionaryItems { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
