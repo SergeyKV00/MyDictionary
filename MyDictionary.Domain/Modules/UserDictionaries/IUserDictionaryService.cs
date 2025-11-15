@@ -1,4 +1,4 @@
-﻿namespace MyDictionary.Domain.UserDictionaries;
+﻿namespace MyDictionary.Domain.Modules.UserDictionaries;
 
 public interface IUserDictionaryService
 {

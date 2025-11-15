@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Domain.Modules.UserDictionaries;
 using MyDictionary.Infrastructure.Persistence.Abstracts;
 
 namespace MyDictionary.Infrastructure.Persistence.Configurations;

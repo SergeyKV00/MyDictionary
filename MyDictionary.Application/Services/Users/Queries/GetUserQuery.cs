@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Common.Mappings;
-using MyDictionary.Application.Interfaces;
+using MyDictionary.Application.Interfaces.Messaging;
+using MyDictionary.Application.Interfaces.Persistence;
 using MyDictionary.Application.Services.Users.Models;
 using MyDictionary.Domain.Common;
-using MyDictionary.Domain.Users;
+using MyDictionary.Domain.Modules.Users;
 
 namespace MyDictionary.Application.Services.Users.Queries;
 

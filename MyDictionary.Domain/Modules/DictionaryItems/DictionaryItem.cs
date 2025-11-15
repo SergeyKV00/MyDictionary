@@ -1,8 +1,8 @@
 ﻿using MyDictionary.Domain.Common;
 using MyDictionary.Domain.Interfaces;
-using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Domain.Modules.UserDictionaries;
 
-namespace MyDictionary.Domain.UserDictionaryItems;
+namespace MyDictionary.Domain.Modules.DictionaryItems;
 
 public class DictionaryItem : Entity, IAuditable
 {
@@ -12,6 +12,6 @@ public class DictionaryItem : Entity, IAuditable
     public string Term { get; set; }
     public string Meaning { get; set; }
     public int Weight { get; set; }
-    public DateTime Created {  get; set; }
-    public DateTime? Deleted {  get; set; }
+    public DateTime Created { get; set; }
+    public DateTime? Deleted { get; set; }
 }

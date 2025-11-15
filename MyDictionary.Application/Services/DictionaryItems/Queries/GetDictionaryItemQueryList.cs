@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Common;
-using MyDictionary.Application.Interfaces;
+using MyDictionary.Application.Interfaces.Messaging;
+using MyDictionary.Application.Interfaces.Persistence;
 using MyDictionary.Domain.Common;
-using MyDictionary.Domain.UserDictionaryItems;
+using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Queries;
 

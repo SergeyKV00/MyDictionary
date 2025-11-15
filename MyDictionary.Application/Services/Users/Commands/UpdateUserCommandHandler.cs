@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MyDictionary.Application.Interfaces;
+using MyDictionary.Application.Interfaces.Persistence;
 
 namespace MyDictionary.Application.Services.Users.Commands;
 

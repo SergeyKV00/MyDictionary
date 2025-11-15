@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using MyDictionary.Api.Middleware;
 using MyDictionary.Application;
 using MyDictionary.Infrastructure;
 using MyDictionary.Infrastructure.Persistence;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -9,6 +12,20 @@ var config = builder.Configuration;
 builder.Services.AddInfrastructure(config);
 builder.Services.AddApplication();
 builder.Services.AddControllers();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"])),
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+builder.Services.AddAuthorization();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
@@ -33,9 +50,12 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseExceptionHandler();
-//app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
 app.UseCors("AllowClient");
+
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseMiddleware<SessionContextMiddleware>();
 
 app.MapControllers();
 

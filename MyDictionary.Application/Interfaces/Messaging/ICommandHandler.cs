@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MyDictionary.Domain.Common;
 
-namespace MyDictionary.Application.Interfaces;
+namespace MyDictionary.Application.Interfaces.Messaging;
 
 public interface ICommandHandler<TCommand> : IRequestHandler<TCommand, Result>
     where TCommand : ICommand

@@ -1,31 +1,32 @@
-﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Common;
 using MyDictionary.Application.Common.Mappings;
-using MyDictionary.Application.Interfaces;
+using MyDictionary.Application.Interfaces.Messaging;
+using MyDictionary.Application.Interfaces.Persistence;
 using MyDictionary.Application.Services.UserDictionaries.Models;
+using MyDictionary.Domain.Common;
 
 namespace MyDictionary.Application.Services.UserDictionaries.Queries;
 
-public record GetUserDictionaryListQuery(Guid UserId) : IRequest<ListModel<UserDictionaryVm>>
-{
-    public class Handler(IAppDbContext appDbContext) 
-        : IRequestHandler<GetUserDictionaryListQuery, ListModel<UserDictionaryVm>>
-    {
-        public async Task<ListModel<UserDictionaryVm>> Handle(GetUserDictionaryListQuery request,
-            CancellationToken cancellationToken)
-        {
-            var items = await appDbContext.UserDictionaries
-                .Where(d => 
-                    d.UserId == request.UserId
-                    && d.Deleted == null)
-                .ToListAsync(cancellationToken);
+public record GetUserDictionaryListQuery(Guid UserId) : IQuery<ListModel<UserDictionaryVm>>;
 
-            return new ListModel<UserDictionaryVm>
-            {
-                Data = items.Select(i => i.ToView()).ToList(),
-                Total = items.Count,
-            };
-        }
+internal class GetUserDictionaryListQueryHandler(IAppDbContext dbContext)
+    : IQueryHandler<GetUserDictionaryListQuery, ListModel<UserDictionaryVm>>
+
+{
+    public async Task<Result<ListModel<UserDictionaryVm>>> Handle(GetUserDictionaryListQuery query,
+        CancellationToken cancellation)
+    {
+        var items = await dbContext.UserDictionaries
+                .Where(d =>
+                    d.UserId == query.UserId
+                && d.Deleted == null)
+                .ToListAsync(cancellation);
+
+        return new ListModel<UserDictionaryVm>
+        {
+            Data = items.Select(i => i.ToView()).ToList(),
+            Total = items.Count,
+        };
     }
 }

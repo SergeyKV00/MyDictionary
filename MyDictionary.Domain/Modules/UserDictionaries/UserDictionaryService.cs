@@ -1,6 +1,4 @@
-﻿using MyDictionary.Infrastructure.Persistence.Repostiories.UserDictionaries;
-
-namespace MyDictionary.Domain.UserDictionaries;
+﻿namespace MyDictionary.Domain.Modules.UserDictionaries;
 
 public class UserDictionaryService : IUserDictionaryService
 {

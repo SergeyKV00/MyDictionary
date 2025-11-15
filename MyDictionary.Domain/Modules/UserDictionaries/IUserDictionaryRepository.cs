@@ -1,4 +1,4 @@
-﻿namespace MyDictionary.Infrastructure.Persistence.Repostiories.UserDictionaries;
+﻿namespace MyDictionary.Domain.Modules.UserDictionaries;
 
 public interface IUserDictionaryRepository
 {

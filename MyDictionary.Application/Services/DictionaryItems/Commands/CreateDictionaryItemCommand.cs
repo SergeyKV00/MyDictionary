@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using MyDictionary.Application.Interfaces;
+using MyDictionary.Application.Interfaces.Messaging;
+using MyDictionary.Application.Interfaces.Persistence;
 using MyDictionary.Domain.Common;
-using MyDictionary.Domain.UserDictionaries;
-using MyDictionary.Domain.UserDictionaryItems;
+using MyDictionary.Domain.Modules.DictionaryItems;
+using MyDictionary.Domain.Modules.UserDictionaries;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Commands;
 

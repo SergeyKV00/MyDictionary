@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyDictionary.Domain.UserDictionaries;
-using MyDictionary.Domain.UserDictionaryItems;
-using MyDictionary.Domain.Users;
+using MyDictionary.Domain.Modules.DictionaryItems;
+using MyDictionary.Domain.Modules.UserDictionaries;
+using MyDictionary.Domain.Modules.Users;
 
-namespace MyDictionary.Application.Interfaces;
+namespace MyDictionary.Application.Interfaces.Persistence;
 
 public interface IAppDbContext
 {

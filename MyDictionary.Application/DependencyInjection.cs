@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MyDictionary.Application.Common.Behaviors;
-using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Domain.Modules.UserDictionaries;
 using System.Reflection;
 
 namespace MyDictionary.Application

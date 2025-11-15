@@ -1,6 +1,6 @@
 ﻿using MyDictionary.Domain.Common;
 
-namespace MyDictionary.Domain.DictionaryItems;
+namespace MyDictionary.Domain.Modules.DictionaryItems;
 
 public static class DictionaryItemErrors
 {

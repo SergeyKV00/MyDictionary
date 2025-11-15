@@ -1,18 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyDictionary.Api.Abstracts;
 using MyDictionary.Api.Contracts.UserDictionary;
 using MyDictionary.Application.Services.UserDictionaries.Commands;
 using MyDictionary.Application.Services.UserDictionaries.Queries;
+using MyDictionary.Domain;
 
 namespace MyDictionary.Api.Controllers;
 
-public class UserDictionaryController : BaseController
+[Authorize]
+public class UserDictionaryController(SessionContext session) : BaseController
 {
     [HttpPost]
-    public async Task<IActionResult> List([FromBody] GetUserDictionaryListQuery query)
+    public async Task<IActionResult> List()
     {
-        var list = await Mediator.Send(query);
-        return Ok(list);
+        var query = new GetUserDictionaryListQuery(UserId: session.UserId);
+        return HandleResult(await Mediator.Send(query));
     }
 
     [HttpGet]
@@ -25,9 +28,8 @@ public class UserDictionaryController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] UserDictionaryCreateRequest requests)
     {
-        //TODO Need Session
         var command = new CreateUserDictionaryCommand(
-            UserId: new Guid("3426FC5B-1BBF-F011-AD82-AC5AFCC04D1B"),
+            UserId: session.UserId,
             Name: requests.Name
         );
 
@@ -44,12 +46,10 @@ public class UserDictionaryController : BaseController
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateDictionaryRequest request)
     {
-        //TODO Need Session
-        var tsun = new Guid("3426FC5B-1BBF-F011-AD82-AC5AFCC04D1B");
         var command = new UpdateUserDictionaryCommand(
             Id: request.Id,
             Name: request.Name,
-            UserId: tsun
+            UserId: session.UserId
         );
 
         return HandleResult(await Mediator.Send(command));

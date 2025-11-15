@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyDictionary.Domain.Modules.UserDictionaries;
 
 namespace MyDictionary.Infrastructure.Persistence.Repostiories.UserDictionaries;
 

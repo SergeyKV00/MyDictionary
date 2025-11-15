@@ -1,8 +1,8 @@
 ﻿using MyDictionary.Domain.Common;
 using MyDictionary.Domain.Interfaces;
-using MyDictionary.Domain.UserDictionaries;
+using MyDictionary.Domain.Modules.UserDictionaries;
 
-namespace MyDictionary.Domain.Users;
+namespace MyDictionary.Domain.Modules.Users;
 
 public class User : Entity, IAuditable
 {

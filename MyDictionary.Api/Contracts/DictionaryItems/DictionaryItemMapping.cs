@@ -1,5 +1,5 @@
 ﻿using MyDictionary.Api.Contracts.DictionaryItems.Models;
-using MyDictionary.Domain.UserDictionaryItems;
+using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Api.Contracts.DictionaryItems;
 

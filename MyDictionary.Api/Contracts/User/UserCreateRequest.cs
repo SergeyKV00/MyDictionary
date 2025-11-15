@@ -1,11 +1,12 @@
-﻿namespace MyDictionary.Api.Contracts.User
+﻿namespace MyDictionary.Api.Contracts.User;
+
+public record UserCreateRequest(
+    string UserName,
+    string Email,
+    string Password
+);
+
+public class UserCreateResponse
 {
-    public class UserCreateRequest
-    {
-    }
 
-    public class UserCreateResponse
-    {
-
-    }
 }
