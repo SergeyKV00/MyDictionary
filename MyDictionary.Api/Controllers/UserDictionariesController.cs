@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyDictionary.Api.Abstracts;
 using MyDictionary.Api.Contracts.UserDictionaries;
+using MyDictionary.Api.Contracts.UserDictionaries.Requests;
 using MyDictionary.Api.Contracts.UserDictionaries.Responses;
 using MyDictionary.Api.Contracts.UserDictionary;
 using MyDictionary.Application.Services.UserDictionaries.Commands;
@@ -14,9 +15,12 @@ namespace MyDictionary.Api.Controllers;
 public class UserDictionariesController(SessionContext session) : BaseController
 {
     [HttpPost]
-    public async Task<IActionResult> List()
+    public async Task<IActionResult> List(GetUserDictionaryListRequest request)
     {
-        var query = new GetUserDictionaryListQuery(UserId: session.UserId);
+        var query = new GetUserDictionaryListQuery(
+            UserId: session.UserId,
+            IsIncludeItems: request.IsIncludeItems
+        );
         return await Send(query, UserDictionaryListResponse.From);
     }
 

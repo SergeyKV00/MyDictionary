@@ -7,7 +7,10 @@ using MyDictionary.Domain.Modules.UserDictionaries;
 
 namespace MyDictionary.Application.Services.UserDictionaries.Queries;
 
-public record GetUserDictionaryListQuery(Guid UserId) : IQuery<ListModel<UserDictionary>>;
+public record GetUserDictionaryListQuery(
+    Guid UserId,
+    bool IsIncludeItems
+) : IQuery<ListModel<UserDictionary>>;
 
 internal class GetUserDictionaryListQueryHandler(IAppDbContext dbContext)
     : IQueryHandler<GetUserDictionaryListQuery, ListModel<UserDictionary>>
@@ -16,11 +19,15 @@ internal class GetUserDictionaryListQueryHandler(IAppDbContext dbContext)
     public async Task<Result<ListModel<UserDictionary>>> Handle(GetUserDictionaryListQuery query,
         CancellationToken cancellation)
     {
-        var items = await dbContext.UserDictionaries
-                .Where(d =>
-                    d.UserId == query.UserId
-                && d.Deleted == null)
-                .ToListAsync(cancellation);
+        var queryable = dbContext.UserDictionaries
+            .Where(d =>
+                d.UserId == query.UserId &&
+                d.Deleted == null);
+
+        if (query.IsIncludeItems)
+            queryable = queryable.Include(d => d.Items);
+
+        var items = await queryable.ToListAsync(cancellation);
 
         return new ListModel<UserDictionary>
         {
