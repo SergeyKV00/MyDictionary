@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyDictionary.Api.Abstracts;
+using MyDictionary.Api.Contracts.UserDictionaries;
+using MyDictionary.Api.Contracts.UserDictionaries.Responses;
 using MyDictionary.Api.Contracts.UserDictionary;
 using MyDictionary.Application.Services.UserDictionaries.Commands;
 using MyDictionary.Application.Services.UserDictionaries.Queries;
@@ -9,42 +11,42 @@ using MyDictionary.Domain;
 namespace MyDictionary.Api.Controllers;
 
 [Authorize]
-public class UserDictionaryController(SessionContext session) : BaseController
+public class UserDictionariesController(SessionContext session) : BaseController
 {
     [HttpPost]
     public async Task<IActionResult> List()
     {
         var query = new GetUserDictionaryListQuery(UserId: session.UserId);
-        return HandleResult(await Mediator.Send(query));
+        return await Send(query, UserDictionaryListResponse.From);
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] GetUserDictionaryQueryOld query)
+    public async Task<IActionResult> Get([FromQuery] Guid id)
     {
-        var model = await Mediator.Send(query);
-        return Ok(model);
+        var query = new GetUserDictionaryQuery(Id: id);
+        return await Send(query, UserDictionaryResponse.MapFrom);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] UserDictionaryCreateRequest requests)
+    public async Task<IActionResult> Create([FromBody] CreateUserDictionaryRequest requests)
     {
         var command = new CreateUserDictionaryCommand(
             UserId: session.UserId,
             Name: requests.Name
         );
 
-        return HandleResult(await Mediator.Send(command));
+        return await Send(command);
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] Guid id)
     {
         var command = new DeleteUserDictionaryCommand(id);
-        return HandleResult(await Mediator.Send(command));
+        return await Send(command);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateDictionaryRequest request)
+    public async Task<IActionResult> Update([FromBody] UpdatUserDictionaryRequest request)
     {
         var command = new UpdateUserDictionaryCommand(
             Id: request.Id,
@@ -52,6 +54,6 @@ public class UserDictionaryController(SessionContext session) : BaseController
             UserId: session.UserId
         );
 
-        return HandleResult(await Mediator.Send(command));
+        return await Send(command);
     }
 }

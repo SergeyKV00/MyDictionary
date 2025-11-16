@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyDictionary.Api.Abstracts;
 using MyDictionary.Api.Contracts.DictionaryItems;
-using MyDictionary.Api.Contracts.DictionaryItems.Models;
-using MyDictionary.Api.Extensions;
 using MyDictionary.Application.Services.DictionaryItems.Commands;
 using MyDictionary.Application.Services.DictionaryItems.Queries;
 
 namespace MyDictionary.Api.Controllers;
 
+[Authorize]
 public class DictionaryItemsController : BaseController
 {
     [HttpPost]
@@ -19,8 +19,7 @@ public class DictionaryItemsController : BaseController
             Meaning: request.Meaning
         );
 
-        var result = await Mediator.Send(query);
-        return HandleResult(result.MapList(r => r.ToResponse()));
+        return await Send(query, DictionaryItemListResponse.MapFrom);
     }
 
     [HttpPost]
@@ -32,7 +31,7 @@ public class DictionaryItemsController : BaseController
             Meaning: request.Meaning
         );
 
-        return HandleResult(await Mediator.Send(command));
+        return await Send(command);
     }
 
     [HttpPut]
@@ -45,13 +44,13 @@ public class DictionaryItemsController : BaseController
             Weight: request.Weight
         );
 
-        return HandleResult(await Mediator.Send(command));
+        return await Send(command);
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] Guid Id)
     {
         var command = new DeleteDictionaryItemCommand(Id: Id);
-        return HandleResult(await Mediator.Send(command));
+        return await Send(command);
     }
 }

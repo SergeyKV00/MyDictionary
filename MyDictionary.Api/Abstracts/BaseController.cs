@@ -1,10 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using MyDictionary.Api.Extensions;
+using MyDictionary.Application.Common;
 using MyDictionary.Domain.Common;
 using System.Net;
-using System.Security.Claims;
 
 namespace MyDictionary.Api.Abstracts;
 
@@ -15,11 +14,49 @@ public abstract class BaseController : ControllerBase
     private IMediator _mediator;
     protected IMediator Mediator => _mediator ?? HttpContext.RequestServices.GetService<IMediator>();
 
-    internal Guid UserId => !User.Identity.IsAuthenticated
-        ? Guid.Empty
-        : Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+    protected async Task<IActionResult> Send(
+    IRequest<Result> query,
+    HttpStatusCode success = HttpStatusCode.OK)
+    {
+        var result = await Mediator.Send(query);
+        return HandleResult(result, success);
+    }
 
-    protected IActionResult HandleResult(Result result, HttpStatusCode successStatus = HttpStatusCode.OK)
+    protected async Task<IActionResult> Send<TSource>(
+        IRequest<Result<TSource>> query,
+        HttpStatusCode success = HttpStatusCode.OK)
+    {
+        return await Send<TSource, TSource>(query, null, success);
+    }
+
+    protected async Task<IActionResult> Send<TSource, TResult>(
+        IRequest<Result<TSource>> query,
+        Func<TSource, TResult>? mapper = null,
+        HttpStatusCode success = HttpStatusCode.OK)
+    {
+        var result = await Mediator.Send(query);
+
+        if (mapper is null)
+            return HandleResult(result, success);
+
+        return HandleResult(result.Map(mapper), success);
+    }
+
+    protected async Task<IActionResult> Send<TSource, TResult>(
+        IRequest<Result<ListModel<TSource>>> query,
+        Func<TSource, TResult>? mapper = null,
+        HttpStatusCode success = HttpStatusCode.OK)
+    {
+        var result = await Mediator.Send(query);
+
+        if (mapper is null)
+            return HandleResult(result, success);
+
+        return HandleResult(result.MapList(mapper), success);
+    }
+
+    protected IActionResult HandleResult(Result result, 
+        HttpStatusCode successStatus = HttpStatusCode.OK)
     {
         var TResult = result.IsSuccess
             ? Result.Success<object>(null)
@@ -28,7 +65,8 @@ public abstract class BaseController : ControllerBase
         return HandleResult(TResult, successStatus);
     }
  
-    protected IActionResult HandleResult<T>(Result<T> result, HttpStatusCode successStatus = HttpStatusCode.OK)
+    protected IActionResult HandleResult<T>(Result<T> result, 
+        HttpStatusCode successStatus = HttpStatusCode.OK)
     {
         if (result.IsSuccess)
         {

@@ -17,8 +17,4 @@
     <ProjectReference Include="..\MyDictionary.Domain\MyDictionary.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\DictionaryItems\Models\" />
-  </ItemGroup>
-
 </Project>
