@@ -1,18 +1,18 @@
-import { api } from '@/engine/api'
+import { apiPost, apiGet} from "@/engine/api";
 
 const endpoint = "Users";
 
 class UserService {
-  async getUser(id: string) {
-    const r = await api.get(`/${endpoint}/Get?id=${id}`);
-    return r.data;
+  async get(id: string) {
+    return await apiGet(`/${endpoint}/Get?id=${id}`);
   }
-  async login(userName: string, password: string) {
-    const r = await api.post(`/${endpoint}/Login`, {
-        userName,
-        password
+  async login(username: string, password: string) {
+    const response =  await apiPost<string>(`/${endpoint}/Login`, {
+      username,
+      password
     });
-    return r.data;
+
+    return response;
   }
 }
 

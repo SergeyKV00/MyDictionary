@@ -59,8 +59,8 @@ public abstract class BaseController : ControllerBase
         HttpStatusCode successStatus = HttpStatusCode.OK)
     {
         var TResult = result.IsSuccess
-            ? Result.Success<object>(null)
-            : Result.Failure<object>(result.Error);
+            ? Result.Success<string?>(null)
+            : Result.Failure<string?>(result.Error);
 
         return HandleResult(TResult, successStatus);
     }
@@ -70,12 +70,14 @@ public abstract class BaseController : ControllerBase
     {
         if (result.IsSuccess)
         {
-            if (typeof(T) == typeof(object) || result.Value == null)
-                return CreateSuccessResult<object>(null, successStatus);
-            return CreateSuccessResult(result.Value, successStatus);
+            var sussessResponse = new SuccessResponse<T>(
+                Value: result.Value,
+                IsSuccess: result.IsSuccess
+            );
+            return CreateSuccessResult(sussessResponse, successStatus);
         }
 
-        return Problem(result);
+        return new ObjectResult(result.GetProblem());
     }
 
     private IActionResult CreateSuccessResult<T>(T value, HttpStatusCode status)
@@ -86,21 +88,6 @@ public abstract class BaseController : ControllerBase
             HttpStatusCode.Created => Created(string.Empty, value),
             HttpStatusCode.NoContent => NoContent(),
             _ => StatusCode((int)status, value)
-        };
-    }
-
-    private ObjectResult Problem(Result result)
-    {
-        var problem = new ProblemDetails
-        {
-            Status = (int)HttpStatusCode.BadRequest,
-            Title = "Bad Request"
-        };
-
-        problem.Extensions["Errors"] = new[] { result.Error };
-        return new ObjectResult(problem)
-        {
-            StatusCode = problem.Status
         };
     }
 }

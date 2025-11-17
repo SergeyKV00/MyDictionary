@@ -1,33 +1,35 @@
 import { defineStore } from "pinia";
-import { api } from '@/engine/api';
+import UserService from "@/services/user"
+import type { FrontendError } from "@/models/base/FrontendError"
 
 interface AuthState {
   token: string | null;
   userName: string | null;
 }
 
-export const useAuthStore = defineStore('auth', {
-    state: (): AuthState => ({
-        token: localStorage.getItem('token'),
-        userName: localStorage.getItem('userName')
-    }),
-    getters: {
-        isAuthenticated: (state) => !!state.token
-    },
-    actions: {
+export const useAuthStore = defineStore("auth", {
+  state: (): AuthState => ({
+    token: localStorage.getItem("token"),
+    userName: localStorage.getItem("userName")
+  }),
+
+  getters: {
+    isAuthenticated: (state) => !!state.token
+  },
+
+  actions: {
     async login(username: string, password: string) {
       try {
-        const response = await api.post('/Users/Login', { username, password });
-        console.log(response)
-        this.token = response.data;
+        const token = await UserService.login(username, password);
+
+        this.token = token;
         this.userName = username;
 
-        if (this.token) 
-            localStorage.setItem('token', this.token);
+        if (this.token)
+          localStorage.setItem("token", token!);
         if (this.userName)
-            localStorage.setItem('userName', this.userName);
-      } catch (err) {
-        console.error('Login failed', err);
+          localStorage.setItem("userName", username);
+      } catch (err: unknown) {
         throw err;
       }
     },
@@ -35,17 +37,17 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.token = null;
       this.userName = null;
-      localStorage.removeItem('token');
-      localStorage.removeItem('userName');
+      localStorage.removeItem("token");
+      localStorage.removeItem("userName");
     },
 
     initialize() {
-      const token = localStorage.getItem('token');
-      const userName = localStorage.getItem('userName');
+      const token = localStorage.getItem("token");
+      const userName = localStorage.getItem("userName");
       if (token) {
         this.token = token;
         this.userName = userName;
       }
     }
   }
-})
+});

@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import Login from '@/pages/auth/Login.vue'
-import Home from '@/pages/Home.vue'
+const Login = () => import('@/pages/auth/Login.vue')
+const Main = () => import('@/pages/main/main.vue')
+const DictionaryList = () => import('@/pages/dictionaries/DictionaryList.vue')
 
 import { useAuthStore } from '@/store/auth';
 
 const routes = [
-  { path: '/', component: Home, meta: { requiresAuth: true } },
+  { path: '/', component: Main, meta: { requiresAuth: true } },
+  { path: '/dictionaries', component: DictionaryList, meta: { requiresAuth: true }},
   { path: '/login', component: Login },
 ];
 

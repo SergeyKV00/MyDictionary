@@ -1,34 +1,20 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { i18n } from '@/locales/i18';
 
 import App from './App.vue'
 import router from './router'
+import ElementPlus from 'element-plus'
 
-import 'vuetify/styles';
-import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
-
-const vuetify = createVuetify({
-    theme: {
-    themes: {
-      light: {
-        dark: false,
-        colors: {
-          primary: "#E57373",
-          secondary: "#FFCDD2"
-        }
-      },
-    },
-  },
-  components,
-  directives,
-});
+import 'element-plus/dist/index.css'
+import '@/assets/styles/variables.css'
+import '@/assets/styles/style.css'
 
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-app.use(vuetify);
+app.use(ElementPlus);
+app.use(i18n);
 
 app.mount('#app')

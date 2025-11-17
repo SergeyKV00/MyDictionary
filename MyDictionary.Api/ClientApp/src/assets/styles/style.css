@@ -1,0 +1,27 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.wh-100 {
+    width: 100%;
+}
+
+.span-error {
+    color: #ba2525;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+.center-message {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}

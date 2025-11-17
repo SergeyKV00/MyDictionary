@@ -1,5 +1,7 @@
-﻿using MyDictionary.Application.Common;
+﻿using Microsoft.AspNetCore.Mvc;
+using MyDictionary.Application.Common;
 using MyDictionary.Domain.Common;
+using System.Net;
 
 namespace MyDictionary.Api.Extensions;
 
@@ -32,5 +34,19 @@ public static class ResultMappingExtension
             Data = mappedList,
             Total = result.Value?.Total ?? 0
         };
+    }
+
+    public static ProblemDetails GetProblem(this Result result)
+    {
+        var problem = new ProblemDetails
+        {
+            Status = (int)HttpStatusCode.BadRequest,
+            Title = "Bad Request"
+        };
+
+        problem.Extensions["isSuccess"] = false;
+        problem.Extensions["error"] = result.Error;
+
+        return problem;
     }
 }

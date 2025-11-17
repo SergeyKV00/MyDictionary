@@ -1,0 +1,14 @@
+{
+    "Auth": {
+        "WelcomeBack": "С возвращением",
+        "SignIn": "Вход",
+        "SingUp": "Зарегистрироваться",
+        "Login": "Логин",
+        "Password": "Пароль",
+        "NoAccount": "Ещё нет аккаунта?",
+        "InvalidCredentials": "Неверные логин или пароль"
+    },
+    "Errors": {
+        "ValidationError": "Ошибка валидации"
+    }
+}

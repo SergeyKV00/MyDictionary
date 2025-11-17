@@ -41,8 +41,10 @@ public class LoginUserCommandValiadator : AbstractValidator<LoginUserCommand>
 {
     public LoginUserCommandValiadator()
     {
-        RuleFor(command => command.UserName).NotEmpty();
-        RuleFor(command => command.Password).NotEmpty();
+        RuleFor(command => command.UserName).NotEmpty()
+            .WithMessage("Логин должен быть заполнен");
+        RuleFor(command => command.Password).NotEmpty()
+            .WithMessage("Пароль должен быть заполнен");
     }
 }
 

@@ -1,0 +1,14 @@
+{
+    "Auth": {
+        "WelcomeBack": "Welcome back",
+        "SignIn": "Sign In",
+        "SingUp": "Sing Up",
+        "Login": "Login",
+        "Password": "Password",
+        "NoAccount": "Don't have an account?",
+        "InvalidCredentials": "Incorrect login or password"
+    },
+    "Errors": {
+        "ValidationError": "Validation error"
+    }
+}
