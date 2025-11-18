@@ -1,12 +1,84 @@
 import axios from 'axios';
-import { useAuthStore } from '@/store/auth';
+import { useAuthStore } from '@/features/Auth/store/AuthStore';
 import type { FrontendError } from '@/models/base/FrontendError';
 import type { ApiResponse } from '@/models/base/ApiResponse';
 import { NotificationService } from '@/services/notification'
 import { NotifiableErrors } from "@/engine/errorConfig";
 
+export class EndPointBuilder {
+  endpoint: string = "";
+
+  constructor (endpoint: string) {
+    this.endpoint = endpoint;
+  }
+
+  build(action: string, queries?: Record<string, any>) {
+    return new EndPointCfg(this.endpoint, action, queries);
+  }
+}
+
+class EndPointCfg {
+  endpoint: string = "";
+  action: string = "";
+  queries?: Record<string, any>
+
+  constructor (endpoint: string, action: string, queries?: Record<string, any>) {
+    this.endpoint = endpoint;
+    this.action = action;
+    this.queries = queries;
+  }
+
+  getUrl(): string {
+    const path = [`/${this.endpoint}`, this.action].filter(a => a !== "").join("/");
+    
+    if (!this.queries || Object.keys(this.queries).length === 0) {
+      return path;
+    }
+
+    const params = new URLSearchParams();
+    
+    for (const key in this.queries) {
+      if (Object.prototype.hasOwnProperty.call(this.queries, key)) {
+        const value = this.queries[key];
+        
+        if (value !== undefined && value !== null) {
+          if (Array.isArray(value)) {
+            value.forEach(item => params.append(key, String(item)));
+          } else {
+            params.append(key, String(value));
+          }
+        }
+      }
+    }
+    
+    const queryString = params.toString();
+    return queryString ? `${path}?${queryString}` : path;
+  }
+}
+
+class Api {
+  async post<T>(cfg: string | EndPointCfg, payload?: any): Promise<T | null> {
+    const url = (cfg instanceof EndPointCfg) ? cfg.getUrl() : cfg;
+    const response = await api.post<ApiResponse<T>>(url, payload ?? {});
+    return response as unknown as T | null;
+  }
+  async get<T>(cfg: string | EndPointCfg): Promise<T | null> {
+    const url = (cfg instanceof EndPointCfg) ? cfg.getUrl() : cfg;
+    const response = await api.get<ApiResponse<T>>(url);
+    return response as unknown as T | null;
+  }
+  async delete<T>(cfg: string | EndPointCfg): Promise<T | null> {
+    const url = (cfg instanceof EndPointCfg) ? cfg.getUrl() : cfg;
+    const response = await api.delete<ApiResponse<T>>(url);
+    return response as unknown as T | null;
+  }
+
+}
+
+export default new Api();
+
 export async function apiPost<T>(url: string, payload?: any): Promise<T | null> {
-  const response = await api.post<ApiResponse<T>>(url, payload);
+  const response = await api.post<ApiResponse<T>>(url, payload ?? {});
   return response as unknown as T | null;
 }
 

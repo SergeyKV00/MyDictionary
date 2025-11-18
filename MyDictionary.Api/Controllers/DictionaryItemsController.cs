@@ -22,6 +22,13 @@ public class DictionaryItemsController : BaseController
         return await Send(query, DictionaryItemListResponse.MapFrom);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Count([FromQuery] Guid dictionaryId)
+    {
+        var query = new GetDictionaryItemCountQuery(DictionaryId: dictionaryId);
+        return await Send(query);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateDictionaryItemRequest request)
     {

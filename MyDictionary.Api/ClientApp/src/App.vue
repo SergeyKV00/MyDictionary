@@ -21,15 +21,15 @@
 
     <el-container>
       <!-- Sidebar -->
-      <el-aside v-if="showSidebar" width="200px" style="padding:0;">
+      <el-aside v-if="showSidebar" width="200px" style="padding:0; font-weight: bold; font-size: 18px !important;">
         <el-menu :default-active="activeRoute" router>
-          <el-menu-item index="/">Главная</el-menu-item>
-          <el-menu-item index="/dictionaries">Мои словари</el-menu-item>
+          <el-menu-item index="/"><el-icon><House /></el-icon>Главная</el-menu-item>
+          <el-menu-item index="/dictionaries"><el-icon><Notebook /></el-icon>Мои словари</el-menu-item>
         </el-menu>
       </el-aside>
 
       <!-- Main content -->
-      <el-main style="padding:0;">
+      <el-main style="padding: 15px;">
         <router-view />
       </el-main>
     </el-container>
@@ -39,8 +39,9 @@
 <script lang="ts" setup>
 import { ref, watch, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { useAuthStore } from '@/store/auth';
+import { useAuthStore } from '@/features/Auth/store/AuthStore';
 import { useI18n } from 'vue-i18n';
+import { House, Notebook } from '@element-plus/icons-vue'
 
 const auth = useAuthStore();
 const router = useRouter();
