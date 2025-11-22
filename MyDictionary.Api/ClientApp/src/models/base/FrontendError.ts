@@ -1,4 +1,4 @@
-export interface FrontendError {
+export type FrontendError = {
   code: string;
   message: string;
   status?: number;

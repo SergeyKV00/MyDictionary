@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using MyDictionary.Api.Extensions;
 using MyDictionary.Api.Middleware;
 using MyDictionary.Application;
 using MyDictionary.Infrastructure;
@@ -44,7 +45,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllersWithViews(); //???
 builder.Services.AddEndpointsApiExplorer(); //???
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGenWithAuth();
 
 var app = builder.Build();
 

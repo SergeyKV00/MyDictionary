@@ -1,8 +1,10 @@
 {
     "Auth": {
         "WelcomeBack": "Welcome back",
+        "Registraction": "Sing Up",
         "SignIn": "Sign In",
         "SingUp": "Sing Up",
+        "Email": "Email",
         "Login": "Login",
         "Password": "Password",
         "NoAccount": "Don't have an account?",

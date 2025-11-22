@@ -1,8 +1,16 @@
 {
+    "Common": {
+        "Save": "Сохранить",
+        "SaveSuccess": "Сохранено успешно",
+        "Cancel": "Отмена",
+        "DeleteSuccess": "Удаленно успешно"
+    },
     "Auth": {
         "WelcomeBack": "С возвращением",
+        "Registraction": "Регистрация",
         "SignIn": "Вход",
         "SingUp": "Зарегистрироваться",
+        "Email": "Эл.Почта",
         "Login": "Логин",
         "Password": "Пароль",
         "NoAccount": "Ещё нет аккаунта?",
@@ -10,5 +18,10 @@
     },
     "Errors": {
         "ValidationError": "Ошибка валидации"
+    },
+    "DictionaryItem": {
+        "Term": "Термин",
+        "Meaning": "Значение",
+        "Weight": "Вес"
     }
 }

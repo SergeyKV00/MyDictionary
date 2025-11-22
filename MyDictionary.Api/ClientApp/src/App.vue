@@ -50,7 +50,7 @@ const route = useRoute();
 const activeRoute = ref(route.path);
 watch(route, () => (activeRoute.value = route.path));
 
-const showSidebar = computed(() => route.path !== '/login');
+const showSidebar = computed(() => route.path !== '/login' && route.path !== '/registration');
 const showTopRight = computed(() => auth.isAuthenticated && route.path !== '/login');
 
 const { locale } = useI18n();

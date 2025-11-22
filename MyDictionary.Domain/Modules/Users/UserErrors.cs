@@ -11,5 +11,5 @@ public static class UserErrors
     public static Error EmailAlreadyUse(string email) =>
         new("Users.EmailAlreadyUse", $"Email '{email}' is already use.");
     public static Error InvalidCredentials() =>
-        new("User.InvalidCredentials", $"Incorrect login or password.");
+        new("Users.InvalidCredentials", $"Incorrect login or password.");
 }

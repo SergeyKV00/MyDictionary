@@ -45,3 +45,10 @@ body {
     padding: 2px 10px;
     border-radius: 10px;
 }
+.text-mini {
+    color: #565656;
+    font-size: 0.800rem;
+}
+.large-icon .el-icon {
+  font-size: 30px;
+}

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  modelValue: String,
+  modelValue: { type: null as any },
   type: { type: String, default: 'text' },
   placeholder: String,
   name: String

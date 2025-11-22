@@ -2,7 +2,8 @@
 
 const props = defineProps({
   size: { type: String, default: 'mini' },
-  type: { type: String, default: 'primary' }
+  type: { type: String, default: 'primary' },
+  circle: { type: Boolean, default : false }
 })
 
 </script>
@@ -10,8 +11,10 @@ const props = defineProps({
 <template>
   <el-button 
     :size="size" 
-    :type="type" 
+    :type="type"
+    :circle="circle"
     link
+    style="margin: 0px;"
   >
     <slot></slot>
   </el-button>

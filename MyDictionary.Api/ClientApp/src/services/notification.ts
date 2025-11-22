@@ -6,6 +6,22 @@ let notificationOffset = 20;
 const notificationGap = 16; 
 
 export class NotificationService {
+  static notifySuccess(message: string) {
+    ElNotification({ 
+        type: "success", 
+        message, 
+        duration: 5000,
+        customClass: 'center-message'
+    });
+  }
+  static notifyWarning(message: string) {
+    ElNotification({ 
+        type: "warning", 
+        message, 
+        duration: 5000,
+        customClass: 'center-message'
+    });
+  }
   static notifyError(err: FrontendError) {
     const config = NotifiableErrors[err.code];
 

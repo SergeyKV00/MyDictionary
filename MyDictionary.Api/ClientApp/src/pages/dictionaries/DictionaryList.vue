@@ -10,7 +10,13 @@
         </div>
       </template>
       <div class="dictionary__body" v-loading="loading">
-        <el-card v-for="dict in dictionaries" :key="dict.id" class="dictionary-card">
+        <el-card 
+          v-for="dict in dictionaries" 
+          :key="dict.id" 
+          class="dictionary-card" 
+          hover
+          @click="routeToDictionaryItem(dict)"
+        >
           <div class="dictionary-card__body flex-column">
             <div class="flex-space" style="align-items: center;">
               <span>{{ dict.name }}</span>
@@ -51,16 +57,19 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
+import { useDictionaryItemStore } from '@/features/DictionaryItem/store/DictionaryItemStore';
 
 import DictionaryService from '@/services/dictionary';
 import DictionaryItemService from '@/services/dictionaryItem';
 import type { DictionaryDto } from '@/models/dto/dictionary/DictionaryDto';
 import type { DictionaryListRequest } from '@/models/dto/dictionary/DictionaryListRequest';
 import type { CreateDictionaryRequest } from '@/models/dto/dictionary/CreateDictionaryRequest';
-
-
 import { Search, CirclePlus, Delete, Files } from '@element-plus/icons-vue'
+
+const router = useRouter();
+const dictionaryItemStore = useDictionaryItemStore();
 
 const dictionaries = ref<DictionaryDto[]>([]);
 const total = ref(0);
@@ -73,7 +82,11 @@ const dictionaryRequest = ref<DictionaryListRequest>({
 const loadDictionaryList = async () => {
   loading.value = true;
 
-  const result = await DictionaryService.list(dictionaryRequest.value);
+  const response = await DictionaryService.list(dictionaryRequest.value);
+  if (response?.error != null) 
+    return;
+
+  const result = response?.data; 
   dictionaries.value = result?.data ?? [];
   total.value = result?.total ?? 0;
 
@@ -84,7 +97,18 @@ const loadDictionaryList = async () => {
   loading.value = false;
 }
 const getCount = async (dictionaryId: string) => {
-  return await DictionaryItemService.count(dictionaryId);
+  const response = await DictionaryItemService.count(dictionaryId);
+  if (response?.error != null)
+    return 0;
+
+  return response?.data;
+}
+
+const routeToDictionaryItem = (dict: DictionaryDto) => {
+  // dictionaryItemStore.dictionaryName = dict.name; // TODO_U Delete change on dictionaryStore
+  // router.push({name: "DictionaryItems", params: { dictionaryId: dict.id }});
+  dictionaryItemStore.setDictionary(dict);
+  router.push({name: "DictionaryItems" });
 }
 
 const isCreateDialogVisible = ref(false);
@@ -129,7 +153,7 @@ onMounted(async () => {
 
 </script>
 <style>
-.dictionary__header {
+.dictionary__header { 
   font-weight: bold;
   font-size: 25px;
   color: var(--el-color-primary);
@@ -142,6 +166,7 @@ onMounted(async () => {
 }
 .dictionary-card {
   cursor: pointer;
+  border-bottom: 5px solid transparent;
 }
 .dictionary-card__body { 
   width: 250px;
@@ -159,8 +184,5 @@ onMounted(async () => {
 }
 .dictionary-card:hover {
   border-bottom: 5px solid var(--el-color-primary);
-}
-.large-icon .el-icon {
-  font-size: 30px;
 }
 </style>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyDictionary.Api.Abstracts;
 using MyDictionary.Api.Contracts.DictionaryItems;
+using MyDictionary.Application.Common;
 using MyDictionary.Application.Services.DictionaryItems.Commands;
 using MyDictionary.Application.Services.DictionaryItems.Queries;
 

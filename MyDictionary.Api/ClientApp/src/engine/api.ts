@@ -56,23 +56,53 @@ class EndPointCfg {
   }
 }
 
+export type ApiResult<T> = {
+  data?: T | null;
+  error?: FrontendError | null;
+};
+
 class Api {
-  async post<T>(cfg: string | EndPointCfg, payload?: any): Promise<T | null> {
+  url(cfg: string | EndPointCfg) {
     const url = (cfg instanceof EndPointCfg) ? cfg.getUrl() : cfg;
-    const response = await api.post<ApiResponse<T>>(url, payload ?? {});
-    return response as unknown as T | null;
-  }
-  async get<T>(cfg: string | EndPointCfg): Promise<T | null> {
-    const url = (cfg instanceof EndPointCfg) ? cfg.getUrl() : cfg;
-    const response = await api.get<ApiResponse<T>>(url);
-    return response as unknown as T | null;
-  }
-  async delete<T>(cfg: string | EndPointCfg): Promise<T | null> {
-    const url = (cfg instanceof EndPointCfg) ? cfg.getUrl() : cfg;
-    const response = await api.delete<ApiResponse<T>>(url);
-    return response as unknown as T | null;
+    return url;
   }
 
+  async handleApi<T>(apiCall: Promise<T>): Promise<ApiResult<T>> {
+    try {
+      const data = await apiCall;
+      return { data: data };
+    } catch (err: unknown) {
+      const fe = err as FrontendError;
+      return { error: fe };
+    }
+  }
+
+  async post<T>(cfg: string | EndPointCfg, payload?: any): Promise<ApiResult<T> | null> {
+    const response = await this.handleApi(api.post<ApiResponse<T>>(
+      this.url(cfg), 
+      payload ?? {}
+    ));
+    return response as ApiResult<T> | null;
+  }
+  async get<T>(cfg: string | EndPointCfg): Promise<ApiResult<T> | null> {
+    const response = await this.handleApi(api.get<ApiResponse<T>>(
+      this.url(cfg)
+    ));
+    return response as ApiResult<T> | null;
+  }
+  async delete<T>(cfg: string | EndPointCfg): Promise<ApiResult<T>  | null> {
+    const response = await this.handleApi(api.delete<ApiResponse<T>>(
+      this.url(cfg)
+    ));
+    return response as ApiResult<T> | null;
+  }
+  async put<T>(cfg: string | EndPointCfg, payload?: any): Promise<ApiResult<T>  | null> {
+    const response = await this.handleApi(api.put<ApiResponse<T>>(
+      this.url(cfg),
+      payload ?? {}
+    ));
+    return response as ApiResult<T> | null;
+  }
 }
 
 export default new Api();

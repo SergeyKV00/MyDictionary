@@ -1,13 +1,18 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { FormInput } from '@/components/ui/form';
+import { ref, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/features/Auth/store/AuthStore'
+import ErrorMessage from '@/engine/errorConfig';
+
 import { ButtonLink, ButtonBase } from '@/components/ui/buttons';
 import { ErrorLabel } from '@/components/ui/labels';
+import AuthCredentials from './components/AuthCredentials.vue';
 
+import  { rules as authRules } from './components/AuthCredentials.vue';
 import type { LoginPayload } from '../types/LoginPayload';
-import { useAuthStore } from '@/features/Auth/store/AuthStore'
 
 const auth = useAuthStore();
+const route = useRouter();
 
 const form = ref<LoginPayload>({
   userName: "",
@@ -16,14 +21,6 @@ const form = ref<LoginPayload>({
 
 const loginFormRef = ref();
 
-const rules = {
-  userName: [{ required: true, message: 'Введите логин', trigger: 'blur' }],
-  password: [
-    { required: true, message: 'Введите пароль', trigger: 'blur' },
-    { min: 6, message: 'Пароль должен быть не менее 6 символов', trigger: 'blur' }
-  ]
-}
-
 const signIn = async () => {
   const valid = await loginFormRef.value.validate();
   if (!valid) return;
@@ -31,43 +28,40 @@ const signIn = async () => {
   await auth.login(form.value);
 }
 
+const routeToRegistration = () => {
+  route.push({ name: 'Registration' });
+}
+
+onUnmounted(() => {
+  auth.errorCode = null;
+});
 </script>
 
 <template>
-    <el-card class="login-card">
+    <el-card class="login-card" v-loading=auth.loading>
     <h2>{{ $t('Auth.WelcomeBack') }}</h2>
     <el-form
       ref="loginFormRef"
       :model="form"
-      :rules="rules"
+      :rules="authRules"
     >
-      <FormInput 
-        v-model="form.userName" 
-        :placeholder="$t('Auth.Login')"
-        name="userName"
-      />
-      <FormInput 
-        v-model="form.password" 
-        type="password" 
-        :placeholder="$t('Auth.Password')"
-        name="password"
-      />
-      <ErrorLabel class="flex-center">
-        {{ auth.loginError }}
+      <AuthCredentials v-model="form"/>
+      <ErrorLabel 
+        v-if="ErrorMessage.has(auth.errorCode)"
+        class="flex-center">
+        {{ ErrorMessage.show(auth.errorCode) }}
       </ErrorLabel>
-
       <ButtonBase
         class="wh-100"
         @click="signIn"
       >
         {{ $t('Auth.SignIn') }}
       </ButtonBase>
-
       <div class="sing-up-text">
         <span>
           {{ $t('Auth.NoAccount') }}
         </span>
-        <ButtonLink >
+        <ButtonLink @click="routeToRegistration">
           {{ $t('Auth.SingUp') }}
         </ButtonLink>
       </div>
