@@ -3,5 +3,6 @@
 public record CreateDictionaryItemRequest(
     Guid DictionaryId,
     string Term,
-    string Meaning
+    string Meaning,
+    int Weight
 );

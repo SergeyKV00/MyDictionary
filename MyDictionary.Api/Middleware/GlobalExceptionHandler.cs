@@ -43,6 +43,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         var problemDetails = new ProblemDetails
         {
             Title = exception.Message,
+            Detail = exception.StackTrace, // TODO Change on log
             Status = 500
         };
 

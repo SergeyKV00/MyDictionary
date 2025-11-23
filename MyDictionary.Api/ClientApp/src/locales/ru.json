@@ -1,8 +1,13 @@
 {
     "Common": {
         "Save": "Сохранить",
-        "SaveSuccess": "Сохранено успешно",
         "Cancel": "Отмена",
+        "Edit": "Редактировать",
+        "Edit_2": "Изменить",
+        "Delete": "Удалить",
+        "Editing": "Редактирование",
+        "Creating": "Создание",
+        "SaveSuccess": "Сохранено успешно",
         "DeleteSuccess": "Удаленно успешно"
     },
     "Auth": {
@@ -22,6 +27,6 @@
     "DictionaryItem": {
         "Term": "Термин",
         "Meaning": "Значение",
-        "Weight": "Вес"
+        "Weight": "Встречаемость"
     }
 }

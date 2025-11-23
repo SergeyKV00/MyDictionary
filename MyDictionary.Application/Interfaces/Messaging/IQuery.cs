@@ -10,3 +10,10 @@ public interface IQuery : IRequest<Result>
 public interface IQuery<TResponse> : IRequest<Result<TResponse>>
 {
 }
+
+public interface IQueryPages<TResponse> : IQuery<TResponse>
+{
+    public int Offset { get; }
+    public int Limit { get; }
+}
+

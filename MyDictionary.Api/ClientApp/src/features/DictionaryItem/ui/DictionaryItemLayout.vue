@@ -1,57 +1,53 @@
 <script lang="ts" setup>
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed, ref, watch } from 'vue';
 import { useDictionaryItemStore } from '../store/DictionaryItemStore';
 import { CirclePlus, Delete, Edit } from '@element-plus/icons-vue' 
-import { FormInput } from '@/components/ui/form';
-import { ButtonBase, ButtonLink } from '@/components/ui/buttons';
-import type { DictionaryItemCreateRequests } from '../types/requests/DictionaryItemCreateRequests';
+import DictionaryItemEdit from './components/DictionaryItemEdit.vue';
 import type { DictionaryItemType } from '../types/models/DictionaryItemType';
 import { NotificationService } from '@/services/notification';
 import { t } from '@/locales/i18';
 import { ElMessageBox } from 'element-plus';
-import DictionaryItemCard from './components/DictionaryItemCard.vue'
+import DictionaryItemCardNew from './components/DictionaryItemCardNew.vue';
+import Pagination from '@/components/Pagination.vue';
+import type { DictionaryItemListRequest } from '../types/requests/DictionaryItemListRequest';
+import type { AsyncDialogResult } from '@/components/AsyncDialog.vue';
 
 const itemStore = useDictionaryItemStore();
 
 const dictionary = computed(() => itemStore.getDictionary );
-const items = computed(() => itemStore.dictionaryItems ?? []);
+const items = computed(() => {
+  const _items = itemStore.dictionaryItems ?? [];
+  return _items.sort((a, b) => b.weight - a.weight);
+});
+const minWeight = computed(() => itemStore.minWeight);
+const maxWeight = computed(() => itemStore.maxWeight);
+const pageSize = computed(() => itemStore.query.limit);
 
-const itemForm = ref<DictionaryItemCreateRequests | DictionaryItemType>({
-  dictionaryId: dictionary.value?.id!,
-  term: "",
-  meaning: "",
-  weight: 0
+const currentPage = ref(1);
+const itemEditRef = ref();
+
+const filters = ref<DictionaryItemListRequest>({
+  dictionaryId: dictionary.value?.id!
 })
-const isEdit = ref(false);
 
 onMounted(async() => {
-  if (dictionary.value?.id != null) {
-    await itemStore.fetchDictionaryItems({ dictionaryId: dictionary.value?.id });
-  }
+  itemStore.query.limit = 10;
+  await fetchItems();
 })
 
-const onEdit = (val: boolean, item?: DictionaryItemType) => {
-  isEdit.value = val;
-  itemForm.value = item ? item : {
-    dictionaryId: dictionary.value?.id!,
-    term: "",
-    meaning: "",
-    weight: 0
-  }
+watch([currentPage, pageSize], () => {
+  itemStore.query.offset = (currentPage.value - 1) * pageSize.value;
+  fetchItems();
+});
+
+async function fetchItems() {
+  await itemStore.fetchDictionaryItems(filters.value);
 }
 
-const onSave = async () => {
-  try {
-    var item = itemForm.value as DictionaryItemType;
-    if (item.id) {
-      await itemStore.update(item);
-    } else {
-      await itemStore.create(itemForm.value as DictionaryItemCreateRequests);
-    }
-    NotificationService.notifySuccess(t("Common.SaveSuccess"))
-    onEdit(false);
-  } catch (err) {
-    console.error(err);
+async function onCreateOrEdit(item?: DictionaryItemType) {
+  const result = await itemEditRef.value.openAsync(item) as AsyncDialogResult
+  if (result.isSuccess) {
+    item = result.value;
   }
 }
 
@@ -82,59 +78,34 @@ const onDelete = async (id: string) => {
       <div class="flex" style="align-items: center;">
         <span class="dictionaryItem__header">{{ dictionary?.name }}</span>
         <el-button type="success" class="large-icon" :icon="CirclePlus" circle text style="margin-left: 5px;"
-          @click="onEdit(true)"
+          @click="onCreateOrEdit()"
         />
       </div>
     </template>
 
-    <transition name="slide-down">
-      <el-card v-if="isEdit" style="width: 100%;">
-        <el-form
-          :model="itemForm"
-        >
-          <FormInput v-model="itemForm.term" :placeholder="$t('DictionaryItem.Term')"/>
-          <FormInput v-model="itemForm.meaning" :placeholder="$t('DictionaryItem.Meaning')"/>
-          <FormInput v-model="itemForm.weight" :placeholder="$t('DictionaryItem.Weight')"/>
-        </el-form>
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <ButtonBase type="info" @click="onEdit(false)">
-            {{ $t('Common.Cancel') }}
-          </ButtonBase>
-          <ButtonBase type="success" @click="onSave">
-            {{ $t('Common.Save') }}
-          </ButtonBase>
-        </div>
-      </el-card>
-    </transition>
+    <DictionaryItemEdit ref="itemEditRef"/>
 
     <div class="dictionaryItem__body">
-      <div v-for="(item, index) in items" :key="item.id">
-        <DictionaryItemCard v-model="items[index]" @edit="onEdit" @delete="onDelete" />
+      <div class="dictionaryItem__cards-wrapper">
+        <DictionaryItemCardNew 
+          v-for="(item, index) in items" 
+          :key="item.id"
+          v-model="items[index]" 
+          :minWeight="minWeight"
+          :maxWeight="maxWeight"
+          @edit="onCreateOrEdit" 
+          @delete="onDelete" 
+        />
       </div>
     </div>
+
+    <Pagination class="pagination"
+      :total="itemStore.dictionaryItemTotal"
+      v-model:currentPage="currentPage"
+      v-model:pageSize="pageSize"
+    />
   </el-card>
 </template> 
-
-<style scoped>
-/* Эффект выезда сверху вниз */
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: all 0.5s ease;
-}
-
-.slide-down-enter-from,
-.slide-down-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-.slide-down-enter-to,
-.slide-down-leave-from {
-  opacity: 1;
-  transform: translateY(0);
-}
-</style>
-
 <style>
 .dictionaryItem__header { 
   font-weight: bold;
@@ -145,27 +116,19 @@ const onDelete = async (id: string) => {
   display: flex;
   flex-direction: column;
   gap: 15px;
-}
-.dictionaryItem__card {
-  width: 100%;
-  position: relative;
-}
-.dictionaryItem__card_btn {
-  position: absolute;
-  top: -5px;
-  right: -14px;
-  transform: scale(0.7);
+  padding: 5px 10px;
 }
 .dictionaryItem__body {
+  height: calc(100vh - 265px);
+  display: flex;
+  flex-direction: column;
+}
+.dictionaryItem__cards-wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 5px 15px;
-}
-.dictionaryItem__item {
-  width: 380px;
-  display: flex;
-  flex-direction: column;
   gap: 5px;
+  overflow-y: auto;
+  padding: 10px;
 }
 </style>
