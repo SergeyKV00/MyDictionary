@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using MyDictionary.Api.Abstracts;
 using MyDictionary.Api.Contracts.DictionaryItems;
 using MyDictionary.Api.Contracts.DictionaryItems.Requests;
-using MyDictionary.Application.Common;
 using MyDictionary.Application.Services.DictionaryItems.Commands;
 using MyDictionary.Application.Services.DictionaryItems.Queries;
 
@@ -19,8 +18,10 @@ public class DictionaryItemsController : BaseController
             DictionaryId: request.DictionaryId,
             Term: request.Term,
             Meaning: request.Meaning,
-            Offset: request.Offset,
-            Limit: request.Limit
+            SortField: request.SortField,
+            SortOrder: request.SortOrder,
+            Page: request.Page,
+            PageSize: request.PageSize
         );
 
         return await Send(query, DictionaryItemListResponse.MapFrom);

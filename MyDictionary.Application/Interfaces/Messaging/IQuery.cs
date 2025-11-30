@@ -13,7 +13,7 @@ public interface IQuery<TResponse> : IRequest<Result<TResponse>>
 
 public interface IQueryPages<TResponse> : IQuery<TResponse>
 {
-    public int Offset { get; }
-    public int Limit { get; }
+    public int Page { get; }
+    public int PageSize { get; }
 }
 

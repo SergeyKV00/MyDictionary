@@ -23,5 +23,11 @@ public class DictionaryItemConfiguration : EntityConfiguration<DictionaryItem>
             .WithMany(d => d.Items)
             .HasForeignKey(x => x.DictionaryId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(x => new { x.DictionaryId, x.Deleted })
+            .IsClustered(false);
+
+        builder.HasIndex(x => x.Term)
+            .IsClustered(false);
     }
 }

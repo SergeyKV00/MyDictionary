@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { DictionaryItemListRequest } from "../types/requests/DictionaryItemListRequest";
+import { DictionaryItemListRequest } from "../types/requests/DictionaryItemListRequest";
 import DictionaryItemApi from "../api/DictionaryItemApi";
 import type { DictionaryDto } from "@/models/dto/dictionary/DictionaryDto";
 import type { DictionaryItemCreateRequests } from "../types/requests/DictionaryItemCreateRequests";
@@ -15,9 +15,9 @@ export const useDictionaryItemStore = defineStore("dictionaryItem", {
     minWeight: 0,
     maxWeight: 0,
     query: {
-      offset: 0,
-      limit: 1000
-    }
+      page: 1,
+      pageSize: 10
+    },
   }),
   getters: {
     getDictionary: (state) => state.dictionary
@@ -26,7 +26,7 @@ export const useDictionaryItemStore = defineStore("dictionaryItem", {
     async fetchDictionaryItems(request: DictionaryItemListRequest) {
       try {
         this.loading = true;
-
+        
         const response = await DictionaryItemApi.list({...request, ...this.query})
         if (response?.error != null) {
           return Promise.reject();
@@ -34,9 +34,6 @@ export const useDictionaryItemStore = defineStore("dictionaryItem", {
 
         this.dictionaryItems = response?.data?.data ?? [];
         this.dictionaryItemTotal = response?.data?.total ?? 0;
-        
-        this.minWeight = await this.fetchWeight(AggregateWeightType.min) ?? 0;
-        this.maxWeight = await this.fetchWeight(AggregateWeightType.max) ?? 0;
       } finally {
         this.loading = false
       }
@@ -45,28 +42,25 @@ export const useDictionaryItemStore = defineStore("dictionaryItem", {
       this.loading = true;
 
       const response = await DictionaryItemApi.create(request).finally(() => this.loading = false);
-      if (response?.error != null) {
-        return Promise.reject();
-      }
-      await this.fetchDictionaryItems({ dictionaryId: this.dictionary?.id!, ...this.query });
+      if (response?.error != null) return Promise.reject();
+
+      await this.aggregateWeightAll();
     },
     async update(request: DictionaryItemType) {
       this.loading = true;
 
       const response = await DictionaryItemApi.update(request).finally(() => this.loading = false);
-      if (response?.error != null) {
-        return Promise.reject();
-      }
-      await this.fetchDictionaryItems({ dictionaryId: this.dictionary?.id!, ...this.query });
+      if (response?.error != null) return Promise.reject();
+
+      await this.aggregateWeightAll();
     },
     async delete(id: string) {
       this.loading = true;
 
       const response = await DictionaryItemApi.delete(id).finally(() => this.loading = false);
-      if (response?.error != null) {
-        return Promise.reject();
-      }
-      await this.fetchDictionaryItems({ dictionaryId: this.dictionary?.id!, ...this.query });
+      if (response?.error != null) return Promise.reject();
+
+      await this.aggregateWeightAll();
     },
     setDictionary(dictionary: DictionaryDto | null) {
       this.dictionary = dictionary;
@@ -76,6 +70,10 @@ export const useDictionaryItemStore = defineStore("dictionaryItem", {
       } else {
         localStorage.removeItem("dictionary");
       }
+    },
+    async aggregateWeightAll() {
+      this.minWeight = await this.fetchWeight(AggregateWeightType.min) ?? 0;
+      this.maxWeight = await this.fetchWeight(AggregateWeightType.max) ?? 0;
     },
     async fetchWeight(agrWeightType: AggregateWeightType) {
       var response = await DictionaryItemApi.aggregateWeight({ 

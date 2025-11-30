@@ -29,11 +29,7 @@ public static class ResultMappingExtension
         var sourceList = result.Value?.Data ?? new List<Tsource>();
         var mappedList = sourceList.Select(mapper).ToList();
 
-        return new ListModel<TResult>
-        {
-            Data = mappedList,
-            Total = result.Value?.Total ?? 0
-        };
+        return mappedList.ToListModel(result.Value?.Total ?? 0);
     }
 
     public static ProblemDetails GetProblem(this Result result)

@@ -18,6 +18,10 @@ class DictionaryService {
     async delete(dictionaryId: string) {
         await Api.delete(`/${endpoint}/Delete?id=${dictionaryId}`);
     }
+    async searchAcross(term: string | null) {
+        const response = await Api.post<unknown[]>(`/${endpoint}/SearchAcross`, {term});
+        return response;
+    }
 }
 
 export default new DictionaryService();

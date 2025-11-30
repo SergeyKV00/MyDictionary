@@ -9,6 +9,9 @@
           />
         </div>
       </template>
+      <div>
+        <el-input v-model="filters.term" :placeholder="$t('DictionaryItem.Term')"/>
+      </div>
       <div class="dictionary__body" v-loading="loading">
         <el-card 
           v-for="dict in dictionaries" 
@@ -31,6 +34,15 @@
                 <span>{{ dict.itemCount }}</span>
                 <span>карточек</span>
               </div>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <DictionaryItemCardLight 
+                v-for="(item, index) in getMatches(dict.id)" 
+                :key="item.id"
+                :item="item" 
+                :minWeight="item.minWeight"
+                :maxWeight="item.maxWeight"
+              />
             </div>
           </div>
         </el-card>
@@ -56,10 +68,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useDictionaryItemStore } from '@/features/DictionaryItem/store/DictionaryItemStore';
+import DictionaryItemCardLight from '@/features/DictionaryItem/ui/components/DictionaryItemCardLight.vue';
 
 import DictionaryService from '@/services/dictionary';
 import DictionaryItemService from '@/services/dictionaryItem';
@@ -67,6 +80,14 @@ import type { DictionaryDto } from '@/models/dto/dictionary/DictionaryDto';
 import type { DictionaryListRequest } from '@/models/dto/dictionary/DictionaryListRequest';
 import type { CreateDictionaryRequest } from '@/models/dto/dictionary/CreateDictionaryRequest';
 import { Search, CirclePlus, Delete, Files } from '@element-plus/icons-vue'
+import type { DictionaryItemType } from '@/features/DictionaryItem/types/models/DictionaryItemType';
+
+interface UserDictionarySearchAcross {
+  dictionaryId: string,
+  minWeight: number,
+  maxWeight: number,
+  matches: DictionaryItemType[]
+}
 
 const router = useRouter();
 const dictionaryItemStore = useDictionaryItemStore();
@@ -75,9 +96,37 @@ const dictionaries = ref<DictionaryDto[]>([]);
 const total = ref(0);
 const loading = ref(false);
 
+const filters = ref({
+  term: ""
+})
+const searchAcrossResults = ref<UserDictionarySearchAcross[]>([])
+
 const dictionaryRequest = ref<DictionaryListRequest>({
   isIncludeItems: true
 })
+
+watch(
+  filters,
+  () => searchAcross(),
+  {deep: true}
+)
+
+function getMatches(dictionaryId: string) {
+  const item = searchAcrossResults.value.find(r => 
+    r.dictionaryId == dictionaryId &&
+    r.matches.length > 0)
+
+  return item?.matches.map(m => {
+    return {...m, minWeight: item.minWeight, maxWeight: item.maxWeight}
+  }) ?? []; 
+}
+
+async function searchAcross() {
+  const response = await DictionaryService.searchAcross(filters.value.term);
+  if (response?.error != null) return;
+
+  searchAcrossResults.value = (response?.data ?? []) as UserDictionarySearchAcross[];
+}
 
 const loadDictionaryList = async () => {
   loading.value = true;
@@ -163,13 +212,16 @@ onMounted(async () => {
   display:  flex;
   flex-wrap: wrap;
   gap: 15px;
+  margin-top: 15px;
+  align-items: flex-start;
+  justify-content: center;
 }
 .dictionary-card {
   cursor: pointer;
   border-bottom: 5px solid transparent;
 }
 .dictionary-card__body { 
-  width: 250px;
+  width: 500px;
 }
 .dictionary-card .el-card__body {
   padding-bottom: 5px;

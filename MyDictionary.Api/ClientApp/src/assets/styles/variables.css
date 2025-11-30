@@ -1,8 +1,13 @@
 :root {
-  --el-color-primary: #673AB7;
+  /* --el-color-primary: #673AB7;
   --el-color-primary-light-3: #7E57C2;
   --el-color-primary-light-5: #9575CD;
-  --el-color-primary-dark-2: #512DA8;
+  --el-color-primary-dark-2: #512DA8; */
+
+    --el-color-primary: #3a57b7;
+  --el-color-primary-light-3: #5769c2;
+  --el-color-primary-light-5: #757ccd;
+  --el-color-primary-dark-2: #2d31a8;
 
   --el-color-success: #4CAF50;
   --el-color-warning: #FFC107;

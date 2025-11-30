@@ -29,10 +29,6 @@ internal class GetUserDictionaryListQueryHandler(IAppDbContext dbContext)
 
         var items = await queryable.ToListAsync(cancellation);
 
-        return new ListModel<UserDictionary>
-        {
-            Data = items,
-            Total = items.Count,
-        };
+        return items.ToListModel();
     }
 }

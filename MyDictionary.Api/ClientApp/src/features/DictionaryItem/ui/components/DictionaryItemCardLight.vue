@@ -1,37 +1,21 @@
-<script lang="ts" setup>
-import { defineEmits, computed } from 'vue';
-import type { DictionaryItemType } from '../../types/models/DictionaryItemType';
-import { Edit, Delete } from '@element-plus/icons-vue' 
-import { ButtonBase } from '@/components/ui/buttons';
+<script setup lang="ts">
+import { computed } from 'vue';
 import getWeightClassFunc from '../../helpers/getWeightClass';
 
-const emit = defineEmits<{
-  (e: 'edit', item: DictionaryItemType): void
-  (e: 'delete', value: string): void
-}>()
-
 const props = defineProps<{
-  modelValue: any,
+  item: any,
   minWeight: number,
   maxWeight: number
 }>()
-const item = computed(() => props.modelValue);
 
-const onEdit = (item: DictionaryItemType) => {
-  emit('edit', item);
-}
-const onDelete = (value: string) => {
-  emit('delete', value);
-}
+const item = computed(() => props.item);
 
 </script>
-
 <template>
-  <el-card style="width: 80%;">
+  <el-card class="card-light" style="width: 100%;">
     <div class="item__body">
       <div :class="`info ${getWeightClassFunc(item.weight, minWeight, maxWeight)}`">
           <span class="info-weight__value">{{ item.weight }}</span>
-          <span class="info-weight__label">{{ $t("DictionaryItem.Weight")}}</span>
       </div>
       <div class="words">
         <div>
@@ -43,20 +27,17 @@ const onDelete = (value: string) => {
           <span>{{ item.meaning }}</span>
         </div>
       </div>
-      <div class="buttons">
-        <ButtonBase type="primary" @click="onEdit(item)">
-          <span>{{ $t('Common.Edit_2') }}</span>
-          <el-icon style="margin-left: 5px;"><Edit /></el-icon>
-        </ButtonBase>
-        <ButtonBase type="danger" @click="onDelete(item.id)">
-          <span>{{ $t('Common.Delete') }}</span>
-          <el-icon style="margin-left: 5px;"><Delete /></el-icon>
-        </ButtonBase>
-      </div>      
     </div>
   </el-card>
-</template> 
-
+</template>
+<style>
+.card-light .el-card__body {
+  padding: 5px 10px;
+}
+.card-light  {
+  margin: 2px 0px;
+}
+</style>
 <style scoped>
 .item__body {
   display: flex;
@@ -75,9 +56,6 @@ const onDelete = (value: string) => {
 .info-weight__value {
   font-size: 20px;
 }
-.info-weight__label {
-  font-size: 10px;
-}
 .weight-green {
   background: linear-gradient(320deg,rgba(25, 150, 14, 1) 29%, rgba(143, 194, 16, 1) 100%);
 }
@@ -94,10 +72,5 @@ const onDelete = (value: string) => {
 .words__label {
   display: inline-block;
   width: 70px;
-}
-.buttons {
-  display: flex;
-  flex: 1;
-  gap: 10px;
 }
 </style>

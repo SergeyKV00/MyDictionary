@@ -1,4 +1,6 @@
 export class PageRequest {
-  offset?: number;
-  limit?: number;
+  sortField?: string | null;
+  sortOrder?: string | null; 
+  page?: number;
+  pageSize?: number;
 }

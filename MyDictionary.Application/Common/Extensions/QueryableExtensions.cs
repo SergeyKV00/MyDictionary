@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 
 public static class QueryableExtensions
 {
@@ -33,5 +34,37 @@ public static class QueryableExtensions
             return queryable.Where(predicate);
 
         return queryable;
+    }
+
+    public static IQueryable<T> ApplySort<T>(
+        this IQueryable<T> queryable,
+        string? sortField = "Id",
+        string? sortOrder = null)
+    {
+        if (sortField == null) 
+            return queryable;
+
+        var propertyInfo = typeof(T).GetProperty(sortField,
+            BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+        if (propertyInfo == null)
+            return queryable;
+
+        var parameter = Expression.Parameter(typeof(T));
+        var property = Expression.Property(parameter, propertyInfo);
+        var lambda = Expression.Lambda(property, parameter);
+
+        string methodName = sortOrder?.ToLower() == "desc"
+            ? "OrderByDescending"
+            : "OrderBy";
+
+        var result = Expression.Call(
+            typeof(Queryable),
+            methodName,
+            new[] { typeof(T), property.Type },
+            queryable.Expression,
+            Expression.Quote(lambda));
+
+        return queryable.Provider.CreateQuery<T>(result);
     }
 }

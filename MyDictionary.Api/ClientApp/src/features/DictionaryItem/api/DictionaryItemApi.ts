@@ -11,6 +11,7 @@ const endpoint = new EndPointBuilder("DictionaryItems");
 
 class DictionaryItemApi {
   async list(payload: DictionaryItemListRequest) {
+    console.log('DictionaryItemApi', payload)
     return api.post<ListType<DictionaryItemResponse[]>>(endpoint.build("List"), payload);
   }
   async create(payload: DictionaryItemCreateRequests) {

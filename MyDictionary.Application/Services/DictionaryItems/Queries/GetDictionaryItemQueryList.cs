@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyDictionary.Application.Common;
+﻿using MyDictionary.Application.Common;
 using MyDictionary.Application.Interfaces.Messaging;
 using MyDictionary.Application.Interfaces.Persistence;
 using MyDictionary.Domain;
@@ -12,8 +11,10 @@ public record GetDictionaryItemQueryList(
     Guid? DictionaryId,
     string? Term,
     string? Meaning,
-    int Offset,
-    int Limit
+    string? SortField,
+    string? SortOrder,
+    int Page,
+    int PageSize
 ) : IQueryPages<ListModel<DictionaryItem>>;
 
 internal class GetDictionaryItemQueryListHandler(IAppDbContext dbContext, SessionContext session)
@@ -29,14 +30,7 @@ internal class GetDictionaryItemQueryListHandler(IAppDbContext dbContext, Sessio
             .WhereIfNotEmpty(query.Term, d => d.Term.Contains(query.Term))
             .WhereIfNotEmpty(query.Meaning, d => d.Meaning.Contains(query.Meaning));
 
-        var totalCount = await queryable.CountAsync(cancellation);
-
-        var dictionaryItems = await queryable
-            .OrderByDescending(d => d.Weight)
-            .Skip(query.Offset)
-            .Take(query.Limit)
-            .ToListAsync(cancellation);
-
-        return dictionaryItems.ToListModel(totalCount);
+        queryable = queryable.ApplySort(query.SortField, query.SortOrder);
+        return await queryable.CreateAsync(query, cancellation);
     }
 }

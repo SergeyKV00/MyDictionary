@@ -24,6 +24,13 @@ public class UserDictionariesController(SessionContext session) : BaseController
         return await Send(query, UserDictionaryListResponse.From);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> SearchAcross([FromBody] UserDictionarySearchAcrossResponse request)
+    {
+        var query = new SearchAcrosssUserDictionariesQueryList(Term: request.Term);
+        return await Send(query);
+    }
+
     [HttpGet]
     public async Task<IActionResult> Get([FromQuery] Guid id)
     {

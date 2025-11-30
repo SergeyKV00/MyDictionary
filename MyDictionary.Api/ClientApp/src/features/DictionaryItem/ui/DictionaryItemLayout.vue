@@ -3,7 +3,7 @@ import { onMounted, computed, ref, watch } from 'vue';
 import { useDictionaryItemStore } from '../store/DictionaryItemStore';
 import { CirclePlus, Delete, Edit } from '@element-plus/icons-vue' 
 import DictionaryItemEdit from './components/DictionaryItemEdit.vue';
-import type { DictionaryItemType } from '../types/models/DictionaryItemType';
+import { DictionaryItemType } from '../types/models/DictionaryItemType';
 import { NotificationService } from '@/services/notification';
 import { t } from '@/locales/i18';
 import { ElMessageBox } from 'element-plus';
@@ -11,6 +11,8 @@ import DictionaryItemCardNew from './components/DictionaryItemCardNew.vue';
 import Pagination from '@/components/Pagination.vue';
 import type { DictionaryItemListRequest } from '../types/requests/DictionaryItemListRequest';
 import type { AsyncDialogResult } from '@/components/AsyncDialog.vue';
+import DictionaryItemFilter from './components/DictionaryItemFilter.vue';
+import DictionaryItemCardLight from './components/DictionaryItemCardLight.vue';
 
 const itemStore = useDictionaryItemStore();
 
@@ -21,22 +23,25 @@ const items = computed(() => {
 });
 const minWeight = computed(() => itemStore.minWeight);
 const maxWeight = computed(() => itemStore.maxWeight);
-const pageSize = computed(() => itemStore.query.limit);
+const pageSize = computed(() => itemStore.query.pageSize);
 
 const currentPage = ref(1);
 const itemEditRef = ref();
 
 const filters = ref<DictionaryItemListRequest>({
-  dictionaryId: dictionary.value?.id!
+  dictionaryId: dictionary.value?.id!,
+  sortField: "weight",
+  sortOrder: "desc"
 })
 
 onMounted(async() => {
-  itemStore.query.limit = 10;
+  itemStore.query.pageSize = 7;
   await fetchItems();
+  await itemStore.aggregateWeightAll();
 })
 
 watch([currentPage, pageSize], () => {
-  itemStore.query.offset = (currentPage.value - 1) * pageSize.value;
+  itemStore.query.page = currentPage.value;
   fetchItems();
 });
 
@@ -48,6 +53,7 @@ async function onCreateOrEdit(item?: DictionaryItemType) {
   const result = await itemEditRef.value.openAsync(item) as AsyncDialogResult
   if (result.isSuccess) {
     item = result.value;
+    await fetchItems();
   }
 }
 
@@ -64,6 +70,8 @@ const onDelete = async (id: string) => {
     );
 
     await itemStore.delete(id);
+    await fetchItems();
+
     NotificationService.notifySuccess(t("Common.DeleteSuccess"))
   } catch (err) {
     console.error(err);
@@ -83,7 +91,7 @@ const onDelete = async (id: string) => {
       </div>
     </template>
 
-    <DictionaryItemEdit ref="itemEditRef"/>
+    <DictionaryItemFilter v-model:filter="filters" @update:filter="fetchItems()"/>
 
     <div class="dictionaryItem__body">
       <div class="dictionaryItem__cards-wrapper">
@@ -97,6 +105,15 @@ const onDelete = async (id: string) => {
           @delete="onDelete" 
         />
       </div>
+      <!-- <div class="dictionaryItem__cards-wrapper">
+        <DictionaryItemCardLight 
+          v-for="(item, index) in items" 
+          :key="item.id"
+          :item="items[index]" 
+          :minWeight="minWeight"
+          :maxWeight="maxWeight"
+        />
+      </div> -->
     </div>
 
     <Pagination class="pagination"
@@ -105,6 +122,8 @@ const onDelete = async (id: string) => {
       v-model:pageSize="pageSize"
     />
   </el-card>
+
+  <DictionaryItemEdit ref="itemEditRef"/>
 </template> 
 <style>
 .dictionaryItem__header { 
@@ -119,7 +138,7 @@ const onDelete = async (id: string) => {
   padding: 5px 10px;
 }
 .dictionaryItem__body {
-  height: calc(100vh - 265px);
+  height: calc(100vh - 365px);
   display: flex;
   flex-direction: column;
 }

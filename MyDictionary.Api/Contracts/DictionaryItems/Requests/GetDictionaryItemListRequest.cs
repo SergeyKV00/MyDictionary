@@ -1,4 +1,4 @@
-﻿using MyDictionary.Api.Abstracts;
+﻿using MyDictionary.Api.Interfaces;
 
 namespace MyDictionary.Api.Contracts.DictionaryItems;
 
@@ -6,6 +6,8 @@ public record GetDictionaryItemListRequest(
     Guid? DictionaryId,
     string? Term,
     string? Meaning,
-    int Offset,
-    int Limit = int.MaxValue
-) : PageRequest(Offset, Limit);
+    string? SortField,
+    string? SortOrder,
+    int Page,
+    int PageSize
+) : IPageRequest;
