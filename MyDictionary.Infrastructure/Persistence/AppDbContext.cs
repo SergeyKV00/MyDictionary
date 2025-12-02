@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Interfaces.Persistence;
 using MyDictionary.Domain.Interfaces;
+using MyDictionary.Domain.Modules.DictionaryItemExamples;
 using MyDictionary.Domain.Modules.DictionaryItems;
 using MyDictionary.Domain.Modules.UserDictionaries;
 using MyDictionary.Domain.Modules.Users;
@@ -13,6 +14,7 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserDictionary> UserDictionaries { get; set; }
     public DbSet<DictionaryItem> DictionaryItems { get; set; }
+    public DbSet<DictionaryItemExample> DictionaryItemExamples { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -37,7 +39,6 @@ public class AppDbContext : DbContext, IAppDbContext
             switch (tracker.State)
             {
                 case EntityState.Added:
-                case EntityState.Modified:
                     tracker.Entity.Created = DateTime.UtcNow;
                     break;
             }

@@ -1,5 +1,6 @@
 ﻿using MyDictionary.Domain.Common;
 using MyDictionary.Domain.Interfaces;
+using MyDictionary.Domain.Modules.DictionaryItemExamples;
 using MyDictionary.Domain.Modules.UserDictionaries;
 
 namespace MyDictionary.Domain.Modules.DictionaryItems;
@@ -14,4 +15,6 @@ public class DictionaryItem : Entity, IAuditable
     public int Weight { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Deleted { get; set; }
+
+    public ICollection<DictionaryItemExample> Examples { get; set; }
 }

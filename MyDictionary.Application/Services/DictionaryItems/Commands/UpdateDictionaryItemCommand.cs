@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Interfaces.Messaging;
 using MyDictionary.Application.Interfaces.Persistence;
+using MyDictionary.Domain;
 using MyDictionary.Domain.Common;
 using MyDictionary.Domain.Modules.DictionaryItems;
 
@@ -14,13 +15,19 @@ public record UpdateDictionaryItemCommand(
     int? Weight
 ) : ICommand;
 
-internal class UpdateDictionaryItemCommandHander(IAppDbContext appDbContext)
-    : ICommandHandler<UpdateDictionaryItemCommand>
+internal class UpdateDictionaryItemCommandHander(
+    IAppDbContext appDbContext,
+    SessionContext session
+) : ICommandHandler<UpdateDictionaryItemCommand>
 {
-    public async Task<Result> Handle(UpdateDictionaryItemCommand command, CancellationToken cancellation)
+    public async Task<Result> Handle(UpdateDictionaryItemCommand command,
+        CancellationToken cancellation)
     {
         var dictionaryItem = await appDbContext.DictionaryItems
-            .Where(item => item.Id == command.Id)
+            .Where(item => 
+                item.Dictionary.UserId == session.UserId &&
+                item.Id == command.Id
+            )
             .FirstOrDefaultAsync(cancellation);
 
         if (dictionaryItem == null)

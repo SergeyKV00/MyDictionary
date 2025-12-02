@@ -12,7 +12,12 @@ var config = builder.Configuration;
 
 builder.Services.AddInfrastructure(config);
 builder.Services.AddApplication();
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new OptionalJsonConverter<string>());
+    });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

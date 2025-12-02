@@ -7,12 +7,11 @@ import { DictionaryItemType } from '../types/models/DictionaryItemType';
 import { NotificationService } from '@/services/notification';
 import { t } from '@/locales/i18';
 import { ElMessageBox } from 'element-plus';
-import DictionaryItemCardNew from './components/DictionaryItemCardNew.vue';
+import DictionaryItemCard from './components/DictionaryItemCard.vue';
 import Pagination from '@/components/Pagination.vue';
 import type { DictionaryItemListRequest } from '../types/requests/DictionaryItemListRequest';
 import type { AsyncDialogResult } from '@/components/AsyncDialog.vue';
 import DictionaryItemFilter from './components/DictionaryItemFilter.vue';
-import DictionaryItemCardLight from './components/DictionaryItemCardLight.vue';
 
 const itemStore = useDictionaryItemStore();
 
@@ -95,7 +94,7 @@ const onDelete = async (id: string) => {
 
     <div class="dictionaryItem__body">
       <div class="dictionaryItem__cards-wrapper">
-        <DictionaryItemCardNew 
+        <DictionaryItemCard 
           v-for="(item, index) in items" 
           :key="item.id"
           v-model="items[index]" 
@@ -105,15 +104,6 @@ const onDelete = async (id: string) => {
           @delete="onDelete" 
         />
       </div>
-      <!-- <div class="dictionaryItem__cards-wrapper">
-        <DictionaryItemCardLight 
-          v-for="(item, index) in items" 
-          :key="item.id"
-          :item="items[index]" 
-          :minWeight="minWeight"
-          :maxWeight="maxWeight"
-        />
-      </div> -->
     </div>
 
     <Pagination class="pagination"

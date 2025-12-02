@@ -17,10 +17,13 @@ public record CreateDictionaryItemCommand (
     int Weight
 ): ICommand<Guid>;
 
-internal class CreateDictionaryItemCommandHandler(IAppDbContext appDbContext, SessionContext session)
-    : ICommandHandler<CreateDictionaryItemCommand, Guid>
+internal class CreateDictionaryItemCommandHandler(
+    IAppDbContext appDbContext, 
+    SessionContext session
+) : ICommandHandler<CreateDictionaryItemCommand, Guid>
 {
-    public async Task<Result<Guid>> Handle(CreateDictionaryItemCommand command, CancellationToken cancellation)
+    public async Task<Result<Guid>> Handle(CreateDictionaryItemCommand command, 
+        CancellationToken cancellation)
     {
         var dictionary = await appDbContext.UserDictionaries
             .FirstOrDefaultAsync(d =>
