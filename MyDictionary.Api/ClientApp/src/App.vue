@@ -42,15 +42,17 @@ import { useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from '@/features/Auth/store/AuthStore';
 import { useI18n } from 'vue-i18n';
 import { House, Notebook } from '@element-plus/icons-vue'
+import { useLayoutStore } from './stores/layoutStore';
 
 const auth = useAuthStore();
+const layout = useLayoutStore();
 const router = useRouter();
 const route = useRoute();
 
 const activeRoute = ref(route.path);
 watch(route, () => (activeRoute.value = route.path));
 
-const showSidebar = computed(() => route.path !== '/login' && route.path !== '/registration');
+const showSidebar = computed(() => route.path !== '/login' && route.path !== '/registration' && layout.isSidebarVisible);
 const showTopRight = computed(() => auth.isAuthenticated && route.path !== '/login');
 
 const { locale } = useI18n();

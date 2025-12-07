@@ -5,7 +5,8 @@ const props = defineProps({
   modelValue: { type: null as any },
   type: { type: String, default: 'text' },
   placeholder: String,
-  name: String
+  name: String,
+  label: String
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -17,7 +18,7 @@ const model = computed({
 </script>
 
 <template>
-  <el-form-item :prop="name">
+  <el-form-item :prop="name" :label="label">
 	<el-input
 		v-model="model"
 	  :type="type"

@@ -4,6 +4,7 @@ import type { DictionaryItemType } from '../../types/models/DictionaryItemType';
 import { Edit, Delete, ArrowRightBold } from '@element-plus/icons-vue' 
 import { ButtonBase } from '@/components/ui/buttons';
 import getWeightClassFunc from '../../helpers/getWeightClass';
+import DictionaryItemExamples from './DictionaryItemExtensions/DictionaryItemExamples.vue';
 
 const emit = defineEmits<{
   (e: 'edit', item: DictionaryItemType): void
@@ -19,7 +20,7 @@ const props = defineProps<{
 const openIndex = ref();
 const isOpen = ref<boolean>(false);
 
-const item = computed(() => props.modelValue);
+const item = computed(() => props.modelValue as DictionaryItemType);
 
 const onEdit = (item: DictionaryItemType) => {
   emit('edit', item);
@@ -39,7 +40,6 @@ function toggle() {
     <div class="item__body">
       <div class="collapse-arrow"@click="toggle()">
         <el-icon><ArrowRightBold class="arrow" :class="{ 'arrow-open': isOpen}"/></el-icon>
-        <!-- <i class="arrow" :class="{ 'arrow-open': isOpen }"></i> -->
       </div>
       <div :class="`info ${getWeightClassFunc(item.weight, minWeight, maxWeight)}`">
           <span class="info-weight__value">{{ item.weight }}</span>
@@ -73,21 +73,7 @@ function toggle() {
         class="collapse-content"
       >
         <slot name="content" :item="item">
-          .collapse-enter-active,
-.collapse-leave-active {
-  transition: all .25s ease;
-  overflow: hidden;
-}
-
-.collapse-enter,
-.collapse-leave-to {
-  max-height: 0;
-  opacity: 0;
-}
-
-.collapse-content {
-  padding: 10px 0;
-}
+          <DictionaryItemExamples v-if="isOpen" :dictionary-item-id="item.id"/>
         </slot>
       </div>
     </transition>
@@ -150,8 +136,6 @@ function toggle() {
   display: flex;
   align-items: center;
 }
-
-/* Клик-зона стрелки */
 .collapse-arrow {
   width: 24px;
   height: 24px;
@@ -179,6 +163,7 @@ function toggle() {
 }
 
 .collapse-content {
+  width: 100%;
   padding: 10px 0 10px 32px;
 }
 </style>

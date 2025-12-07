@@ -7,17 +7,17 @@ using MyDictionary.Domain.Common;
 using MyDictionary.Domain.Modules.DictionaryItemExamples;
 
 namespace MyDictionary.Application.Services.DictionaryItemExamples.Queries;
+using ResponseDto = ListModel<DictionaryItemExample>;
 
 public record GetDictionaryItemExampleQueryList(
     Guid? DicitonaryItemId
-) : IQuery<ListModel<DictionaryItemExample>>;
-
+) : IQuery<ResponseDto>;
 internal class GetDictionaryItemExampleQueryListHander(
     IAppDbContext dbContext,
     SessionContext session
-) : IQueryHandler<GetDictionaryItemExampleQueryList, ListModel<DictionaryItemExample>>
+) : IQueryHandler<GetDictionaryItemExampleQueryList, ResponseDto>
 {
-    public async Task<Result<ListModel<DictionaryItemExample>>> Handle(
+    public async Task<Result<ResponseDto>> Handle(
         GetDictionaryItemExampleQueryList query, 
         CancellationToken cancellation
     )

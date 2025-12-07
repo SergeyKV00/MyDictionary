@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyDictionary.Api.Abstracts;
 using MyDictionary.Api.Contracts.DictionaryItems;
 using MyDictionary.Api.Contracts.DictionaryItems.Requests;
+using MyDictionary.Api.Contracts.DictionaryItems.Responses;
 using MyDictionary.Application.Services.DictionaryItems.Commands;
 using MyDictionary.Application.Services.DictionaryItems.Queries;
 
@@ -25,6 +26,16 @@ public class DictionaryItemsController : BaseController
         );
 
         return await Send(query, DictionaryItemListResponse.MapFrom);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Get([FromBody] GetDictionaryItemRequest request)
+    {
+        var query = new GetDictionaryItemQuery(
+            Id: request.Id,
+            IsIncludeExample: request.IsIncludeExample
+        );
+        return await Send(query, DictionaryItemResponse.MapFrom);
     }
 
     [HttpGet]
