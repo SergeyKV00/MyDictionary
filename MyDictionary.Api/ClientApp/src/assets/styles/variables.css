@@ -2,17 +2,18 @@
   /* --el-color-primary: #673AB7;
   --el-color-primary-light-3: #7E57C2;
   --el-color-primary-light-5: #9575CD;
-  --el-color-primary-dark-2: #512DA8; */
+  --el-color-primary-dark-2: #512DA8;
+  --el-color-info: #582da1; */
 
-    --el-color-primary: #3a57b7;
+  --el-color-primary: #3a57b7;
   --el-color-primary-light-3: #5769c2;
   --el-color-primary-light-5: #757ccd;
   --el-color-primary-dark-2: #2d31a8;
+  --el-color-info: #097084;
 
   --el-color-success: #4CAF50;
   --el-color-warning: #FFC107;
   --el-color-danger: #F44336;
-  --el-color-info: #00BCD4;
 
   --font-size-base: 16px;
 }

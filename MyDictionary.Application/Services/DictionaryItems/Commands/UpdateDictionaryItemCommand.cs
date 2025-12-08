@@ -13,14 +13,14 @@ public record UpdateDictionaryItemCommand(
     string? Term,
     string? Meaning,
     int? Weight
-) : ICommand;
+) : ICommand<Guid>;
 
 internal class UpdateDictionaryItemCommandHander(
     IAppDbContext appDbContext,
     SessionContext session
-) : ICommandHandler<UpdateDictionaryItemCommand>
+) : ICommandHandler<UpdateDictionaryItemCommand, Guid>
 {
-    public async Task<Result> Handle(UpdateDictionaryItemCommand command,
+    public async Task<Result<Guid>> Handle(UpdateDictionaryItemCommand command,
         CancellationToken cancellation)
     {
         var dictionaryItem = await appDbContext.DictionaryItems
@@ -38,7 +38,7 @@ internal class UpdateDictionaryItemCommandHander(
         if (command.Weight != null) dictionaryItem.Weight = command.Weight.Value;
 
         await appDbContext.SaveChangesAsync(cancellation);
-        return Result.Success();
+        return dictionaryItem.Id;
     }
 }
 

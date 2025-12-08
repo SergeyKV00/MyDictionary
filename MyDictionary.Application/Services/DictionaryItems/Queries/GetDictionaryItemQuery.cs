@@ -20,7 +20,9 @@ public record GetDictionaryItemQuery(
             var queryable = dbContext.DictionaryItems.AsQueryable();
 
             if (query.IsIncludeExample)
-                queryable = queryable.Include(d => d.Examples);
+                queryable = queryable.Include(d =>
+                    d.Examples.Where(d => d.Deleted == null)
+                );
 
             var item = await queryable
                 .FirstOrDefaultAsync(d => d.Id == query.Id, cancellation);

@@ -45,6 +45,7 @@ export const useDictionaryItemStore = defineStore("dictionaryItem", {
       if (response?.error != null) return Promise.reject();
 
       await this.aggregateWeightAll();
+      return response?.data;
     },
     async update(request: DictionaryItemType) {
       this.loading = true;
@@ -53,6 +54,7 @@ export const useDictionaryItemStore = defineStore("dictionaryItem", {
       if (response?.error != null) return Promise.reject();
 
       await this.aggregateWeightAll();
+      return response?.data;
     },
     async delete(id: string) {
       this.loading = true;

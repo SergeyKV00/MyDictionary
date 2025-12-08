@@ -20,8 +20,9 @@ const emit = defineEmits<{
   (e: "close") : void
 }>()
 
+const exampleEditRef = ref();
 const drawerVisible = ref(false);
-const activeNames = ref("");
+const activeNames = ref("examples");
 const item = ref<DictionaryItemType>(createEmptyItem());
 const itemId = ref<string>();
 const query = ref<DictionaryItemRequest>({
@@ -60,6 +61,13 @@ function onSave() {
     : itemStore.create({...item.value, dictionaryId: itemStore.dictionary?.id! } as DictionaryItemCreateRequests)
 
   saveEvent
+    .then((itemId) => {
+      if (itemId != null) {
+        item.value.id = itemId;
+        return exampleEditRef.value.saveExamples(itemId, item.value.examples);
+      }
+        
+    })
     .then(() => {
       close();
       emit('update');
@@ -82,12 +90,21 @@ function close() {
   layoutStore.showSidebar();
 }
 
+// TEMP
+const verbForms = ref([
+  {
+    infinitive: "take ",
+    pastSimple: "took",
+    pastParticiple: "taken"
+  }
+]);
+
 defineExpose({ open });
 </script>
 <template>
   <el-drawer 
     v-model="drawerVisible"
-    size="700"
+    size="40%"
     :modal="false"
     :with-header="false" 
     modal-penetrable 
@@ -106,8 +123,15 @@ defineExpose({ open });
         </el-form>
 
         <el-collapse v-model="activeNames" expand-icon-position="left">
+          <el-collapse-item title="Формы глагола" name="wordForms">
+              <el-table :data="verbForms" border style="width: 100%">
+                <el-table-column prop="infinitive" label="Infinitive" />
+                <el-table-column prop="pastSimple" label="Past Simple" />
+                <el-table-column prop="pastParticiple" label="Past Participle" />
+              </el-table>
+          </el-collapse-item>
           <el-collapse-item title="Примеры" name="examples">
-            <DictionaryItemExamplesEdit :examples="item.examples"/>
+            <DictionaryItemExamplesEdit ref="exampleEditRef" :item="item" :examples="item.examples"/>
           </el-collapse-item>
         </el-collapse>
       </div>

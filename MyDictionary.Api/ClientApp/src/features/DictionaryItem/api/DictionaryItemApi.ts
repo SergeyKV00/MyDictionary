@@ -15,10 +15,10 @@ class DictionaryItemApi {
     return api.post<ListType<DictionaryItemType[]>>(endpoint.build("List"), payload);
   }
   async create(payload: DictionaryItemCreateRequests) {
-    return api.post(endpoint.build("Create"), payload);
+    return api.post<string>(endpoint.build("Create"), payload);
   }
   async update(payload: DictionaryItemType) {
-    return api.put(endpoint.build("Update"), payload);
+    return api.put<string>(endpoint.build("Update"), payload);
   }
   async delete(id: string) {
     var query = { id: id }

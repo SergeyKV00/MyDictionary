@@ -141,6 +141,6 @@ const onDelete = async (id: string) => {
   padding: 10px;
 }
 .open {
-  min-width: 700px;
+  min-width: 40%;
 }
 </style>

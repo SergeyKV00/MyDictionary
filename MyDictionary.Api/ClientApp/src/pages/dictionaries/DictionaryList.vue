@@ -24,7 +24,7 @@
             <div class="flex-space" style="align-items: center;">
               <span>{{ dict.name }}</span>
               <el-button type="dunger" class="dictionary__delete" :icon="Delete" circle text
-                @click="onDelete(dict)"
+                @click.stop="onDelete(dict)"
               />
             </div>
             <div class="flex-space">
@@ -221,7 +221,7 @@ onMounted(async () => {
   border-bottom: 5px solid transparent;
 }
 .dictionary-card__body { 
-  width: 500px;
+  width: 400px;
 }
 .dictionary-card .el-card__body {
   padding-bottom: 5px;
