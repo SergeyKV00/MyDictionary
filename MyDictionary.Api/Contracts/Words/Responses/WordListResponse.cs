@@ -2,16 +2,16 @@
 
 namespace MyDictionary.Api.Contracts.DictionaryItems;
 
-public record DictionaryItemListResponse(
+public record WordListResponse(
     Guid Id,
     string Term,
     string Meaning,
     int Weight
 )
 {
-    public static DictionaryItemListResponse MapFrom(DictionaryItem model)
+    public static WordListResponse MapFrom(Word model)
     {
-        return new DictionaryItemListResponse(
+        return new WordListResponse(
             Id: model.Id,
             Term: model.Term,
             Meaning: model.Meaning,

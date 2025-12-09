@@ -14,7 +14,7 @@ public class AppDbContext : DbContext, IAppDbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<UserDictionary> UserDictionaries { get; set; }
-    public DbSet<DictionaryItem> DictionaryItems { get; set; }
+    public DbSet<Word> Words { get; set; }
     public DbSet<DictionaryItemExample> DictionaryItemExamples { get; set; }
     public DbSet<WordForm> WordForms { get; set; }
 

@@ -4,7 +4,7 @@ using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Api.Contracts.DictionaryItems.Responses;
 
-public record DictionaryItemResponse(
+public record WordResponse(
     Guid Id,
     string Term,
     string Meaning,
@@ -13,9 +13,9 @@ public record DictionaryItemResponse(
     WordFormResponse? WordForm
 )
 {
-    public static DictionaryItemResponse MapFrom(DictionaryItem model)
+    public static WordResponse MapFrom(Word model)
     {
-        return new DictionaryItemResponse(
+        return new WordResponse(
             Id: model.Id,
             Term: model.Term,
             Meaning: model.Meaning,

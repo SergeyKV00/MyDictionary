@@ -7,18 +7,18 @@ using System.Linq;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Queries;
 
-public record GetDictionaryItemWeightQuery(
+public record GetWordWeightQuery(
     Guid DictionaryId, 
     WeightAggregateType WeightAggregate
 ) : IQuery<int>;
 
-internal class GetDictionaryItemWeightQueryHandler(IAppDbContext dbContext)
-    : IQueryHandler<GetDictionaryItemWeightQuery, int>
+internal class GetWordWeightQueryHandler(IAppDbContext dbContext)
+    : IQueryHandler<GetWordWeightQuery, int>
 {
-    public async Task<Result<int>> Handle(GetDictionaryItemWeightQuery query, 
+    public async Task<Result<int>> Handle(GetWordWeightQuery query, 
         CancellationToken cancellation)
     {
-        var queryable = dbContext.DictionaryItems
+        var queryable = dbContext.Words
             .Where(d => d.Deleted == null)
             .Where(d => d.DictionaryId == query.DictionaryId)
             .Select(d => (int?)d.Weight);

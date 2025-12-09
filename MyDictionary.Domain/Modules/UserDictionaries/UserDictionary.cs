@@ -13,5 +13,5 @@ public class UserDictionary : Entity, IAuditable
     public DateTime Created { get; set; }
     public DateTime? Deleted { get; set; }
 
-    public ICollection<DictionaryItem> Items { get; set; }
+    public ICollection<Word> Items { get; set; }
 }

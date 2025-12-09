@@ -23,7 +23,7 @@ internal class CreateWordFormCommandHandler(
     public async Task<Result<Guid>> Handle(CreateWordFormCommand command,
         CancellationToken cancellation)
     {
-        var dictionaryItem = await dbContext.DictionaryItems
+        var dictionaryItem = await dbContext.Words
             .FirstAsync(d =>
                 d.Id == command.DictionaryItemId &&
                 d.Dictionary.UserId == session.UserId &&
@@ -31,7 +31,7 @@ internal class CreateWordFormCommandHandler(
             , cancellation);
 
         if (dictionaryItem == null)
-            return DictionaryItemErrors.NotFound(command.DictionaryItemId);
+            return WordErrors.NotFound(command.DictionaryItemId);
 
         var wordForm = new WordForm()
         {

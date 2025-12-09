@@ -2,7 +2,7 @@
 
 namespace MyDictionary.Api.Contracts.DictionaryItems;
 
-public record GetDictionaryItemListRequest(
+public record GetWordListRequest(
     Guid? DictionaryId,
     string? Term,
     string? Meaning,

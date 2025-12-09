@@ -1,6 +1,6 @@
 ﻿namespace MyDictionary.Application.Services.DictionaryItems.Models;
 
-public class DictionaryItemDto
+public class WordDto
 {
     public Guid Id { get; set; }
     public string Term { get; set; }

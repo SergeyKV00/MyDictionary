@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Interfaces.Messaging;
 using MyDictionary.Application.Interfaces.Persistence;
@@ -10,19 +9,19 @@ using MyDictionary.Domain.Modules.UserDictionaries;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Commands;
 
-public record CreateDictionaryItemCommand (
+public record CreateWordCommand (
     Guid DictionaryId,
     string Term,
     string Meaning,
     int Weight
 ): ICommand<Guid>;
 
-internal class CreateDictionaryItemCommandHandler(
+internal class CreateWordCommandHandler(
     IAppDbContext appDbContext, 
     SessionContext session
-) : ICommandHandler<CreateDictionaryItemCommand, Guid>
+) : ICommandHandler<CreateWordCommand, Guid>
 {
-    public async Task<Result<Guid>> Handle(CreateDictionaryItemCommand command, 
+    public async Task<Result<Guid>> Handle(CreateWordCommand command, 
         CancellationToken cancellation)
     {
         var dictionary = await appDbContext.UserDictionaries
@@ -35,23 +34,23 @@ internal class CreateDictionaryItemCommandHandler(
         if (dictionary == null)
             return UserDictionaryErrors.NotFound(command.DictionaryId);
 
-        var item = new DictionaryItem
+        var item = new Word
         {
             DictionaryId = command.DictionaryId,
             Term = command.Term,
             Meaning = command.Meaning,
             Weight = command.Weight
         };
-        appDbContext.DictionaryItems.Add(item);
+        appDbContext.Words.Add(item);
         await appDbContext.SaveChangesAsync(cancellation);
 
         return item.Id;
     }
 }
 
-public class CreateDictionaryItemCommandValidator : AbstractValidator<CreateDictionaryItemCommand>
+public class CreateWordCommandValidator : AbstractValidator<CreateWordCommand>
 {
-    public CreateDictionaryItemCommandValidator()
+    public CreateWordCommandValidator()
     {
         RuleFor(command => command.DictionaryId).NotEqual(Guid.Empty);
         RuleFor(command => command.Term).NotEmpty();

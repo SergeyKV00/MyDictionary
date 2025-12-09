@@ -23,7 +23,7 @@ internal class CreateDictionaryItemExampleCommandHandler(
     public async Task<Result<Guid>> Handle(CreateDictionaryItemExampleCommand command,
         CancellationToken cancellation)
     {
-        var dictionaryItem = await dbContext.DictionaryItems
+        var dictionaryItem = await dbContext.Words
             .FirstOrDefaultAsync(d =>
                 d.Dictionary.UserId == session.UserId &&
                 d.Id == command.DictionaryItemId &&
@@ -31,7 +31,7 @@ internal class CreateDictionaryItemExampleCommandHandler(
             cancellation);
 
         if (dictionaryItem == null)
-            return DictionaryItemErrors.NotFound(command.DictionaryItemId);
+            return WordErrors.NotFound(command.DictionaryItemId);
 
         var exampleNew = new DictionaryItemExample
         {

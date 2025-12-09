@@ -7,7 +7,7 @@ namespace MyDictionary.Domain.Modules.WordForms;
 public class WordForm : Entity, IAuditable
 {
     public Guid DictionaryItemId { get; set; }
-    public DictionaryItem? DictionaryItem { get; set; }
+    public Word? DictionaryItem { get; set; }
     public string? Infinitive { get; set; }
     public string? PastSimple { get; set; }
     public string? PastParticiple { get; set; }

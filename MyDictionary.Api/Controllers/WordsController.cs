@@ -10,12 +10,12 @@ using MyDictionary.Application.Services.DictionaryItems.Queries;
 namespace MyDictionary.Api.Controllers;
 
 [Authorize]
-public class DictionaryItemsController : BaseController
+public class WordsController : BaseController
 {
     [HttpPost]
-    public async Task<IActionResult> List([FromBody] GetDictionaryItemListRequest request)
+    public async Task<IActionResult> List([FromBody] GetWordListRequest request)
     {
-        var query = new GetDictionaryItemQueryList(
+        var query = new GetWordListQuery(
             DictionaryId: request.DictionaryId,
             Term: request.Term,
             Meaning: request.Meaning,
@@ -25,30 +25,30 @@ public class DictionaryItemsController : BaseController
             PageSize: request.PageSize
         );
 
-        return await Send(query, DictionaryItemListResponse.MapFrom);
+        return await Send(query, WordListResponse.MapFrom);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Get([FromBody] GetDictionaryItemRequest request)
+    public async Task<IActionResult> Get([FromBody] GetWordRequest request)
     {
-        var query = new GetDictionaryItemQuery(
+        var query = new GetWordQuery(
             Id: request.Id,
             IsIncludeExample: request.IsIncludeExample,
             IsIncludeWordForm: request.IsIncludeWordForm
         );
-        return await Send(query, DictionaryItemResponse.MapFrom);
+        return await Send(query, WordResponse.MapFrom);
     }
 
     [HttpGet]
     public async Task<IActionResult> Count([FromQuery] Guid dictionaryId)
     {
-        var query = new GetDictionaryItemCountQuery(DictionaryId: dictionaryId);
+        var query = new GetWordCountQuery(DictionaryId: dictionaryId);
         return await Send(query);
     }
 
-    public async Task<IActionResult> AggregateWeight([FromBody] GetDictionaryItemWeightRequest request)
+    public async Task<IActionResult> AggregateWeight([FromBody] GetWordWeightRequest request)
     {
-        var query = new GetDictionaryItemWeightQuery(
+        var query = new GetWordWeightQuery(
             DictionaryId: request.DictionaryId,
             WeightAggregate: request.WeightAggregate
         );
@@ -56,9 +56,9 @@ public class DictionaryItemsController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateDictionaryItemRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateWordRequest request)
     {
-        var command = new CreateDictionaryItemCommand(
+        var command = new CreateWordCommand(
             DictionaryId: request.DictionaryId,
             Term: request.Term,
             Meaning: request.Meaning,
@@ -69,9 +69,9 @@ public class DictionaryItemsController : BaseController
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateDictionaryItemRequest request)
+    public async Task<IActionResult> Update([FromBody] UpdateWordRequest request)
     {
-        var command = new UpdateDictionaryItemCommand(
+        var command = new UpdateWordCommand(
             Id: request.Id,
             Term: request.Term,
             Meaning: request.Meaning,
@@ -84,7 +84,7 @@ public class DictionaryItemsController : BaseController
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] Guid Id)
     {
-        var command = new DeleteDictionaryItemCommand(Id: Id);
+        var command = new DeleteWordCommand(Id: Id);
         return await Send(command);
     }
 }

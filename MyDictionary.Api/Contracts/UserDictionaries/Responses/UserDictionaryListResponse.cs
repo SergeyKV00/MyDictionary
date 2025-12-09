@@ -6,7 +6,7 @@ using DomainUserDictionary = Domain.Modules.UserDictionaries.UserDictionary;
 public record UserDictionaryListResponse(
     Guid Id, 
     string Name,
-    IReadOnlyList<DictionaryItemListResponse>? Items
+    IReadOnlyList<WordListResponse>? Items
 )
 {
     public static UserDictionaryListResponse From(DomainUserDictionary model)
@@ -14,7 +14,7 @@ public record UserDictionaryListResponse(
         return new UserDictionaryListResponse(
             Id: model.Id, 
             Name: model.Name,
-            Items: model.Items?.Select(DictionaryItemListResponse.MapFrom).ToList()
+            Items: model.Items?.Select(WordListResponse.MapFrom).ToList()
         );
     }
 }

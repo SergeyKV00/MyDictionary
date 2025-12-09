@@ -2,15 +2,15 @@
 using MyDictionary.Application.Interfaces.Messaging;
 using MyDictionary.Application.Interfaces.Persistence;
 using MyDictionary.Domain.Common;
-public record GetDictionaryItemCountQuery(Guid DictionaryId) : IQuery<int>;
+public record GetWordCountQuery(Guid DictionaryId) : IQuery<int>;
 
-internal class GetDictionaryItemCountQueryHandler(IAppDbContext dbContext)
-    : IQueryHandler<GetDictionaryItemCountQuery, int>
+internal class GetWordCountQueryHandler(IAppDbContext dbContext)
+    : IQueryHandler<GetWordCountQuery, int>
 {
-    public async Task<Result<int>> Handle(GetDictionaryItemCountQuery query,
+    public async Task<Result<int>> Handle(GetWordCountQuery query,
         CancellationToken cancellation)
     {
-        var count = await dbContext.DictionaryItems
+        var count = await dbContext.Words
             .Where(d => d.Deleted == null)
             .Where(d => d.DictionaryId == query.DictionaryId)
             .CountAsync(cancellation);

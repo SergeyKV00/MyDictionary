@@ -1,6 +1,6 @@
 ﻿namespace MyDictionary.Api.Contracts.DictionaryItems;
 
-public record CreateDictionaryItemRequest(
+public record CreateWordRequest(
     Guid DictionaryId,
     string Term,
     string Meaning,

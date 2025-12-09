@@ -7,7 +7,7 @@ using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Queries;
 
-public record GetDictionaryItemQueryList(
+public record GetWordListQuery(
     Guid? DictionaryId,
     string? Term,
     string? Meaning,
@@ -15,15 +15,15 @@ public record GetDictionaryItemQueryList(
     string? SortOrder,
     int Page,
     int PageSize
-) : IQueryPages<ListModel<DictionaryItem>>;
+) : IQueryPages<ListModel<Word>>;
 
-internal class GetDictionaryItemQueryListHandler(IAppDbContext dbContext, SessionContext session)
-    : IQueryHandler<GetDictionaryItemQueryList, ListModel<DictionaryItem>>
+internal class GetWordListQueryHandler(IAppDbContext dbContext, SessionContext session)
+    : IQueryHandler<GetWordListQuery, ListModel<Word>>
 {
-    public async Task<Result<ListModel<DictionaryItem>>> Handle(GetDictionaryItemQueryList query, 
+    public async Task<Result<ListModel<Word>>> Handle(GetWordListQuery query, 
         CancellationToken cancellation)
     {
-        var queryable = dbContext.DictionaryItems
+        var queryable = dbContext.Words
             .Where(d => d.Deleted == null)
             .Where(d => d.Dictionary.UserId == session.UserId)
             .WhereIfHasKey(query.DictionaryId, d => d.DictionaryId == query.DictionaryId)

@@ -8,5 +8,5 @@ public class UserDictionarySearchAcrossDto
     public Guid DictionaryId { get; set; }
     public int MinWeight { get; set; }
     public int MaxWeight { get; set; }
-    public List<DictionaryItemDto> Matches { get; set; } = []; 
+    public List<WordDto> Matches { get; set; } = []; 
 }

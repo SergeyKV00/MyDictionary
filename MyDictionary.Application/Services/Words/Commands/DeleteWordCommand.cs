@@ -7,27 +7,27 @@ using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Commands;
 
-public record DeleteDictionaryItemCommand(Guid Id) : ICommand;
+public record DeleteWordCommand(Guid Id) : ICommand;
 
-internal class DeleteDictionaryItemCommandHandler(
+internal class DeleteWordCommandHandler(
     IAppDbContext appDbContext,
     SessionContext session
-) : ICommandHandler<DeleteDictionaryItemCommand>
+) : ICommandHandler<DeleteWordCommand>
 {
-    public async Task<Result> Handle(DeleteDictionaryItemCommand command,
+    public async Task<Result> Handle(DeleteWordCommand command,
         CancellationToken cancellation)
     {
-        var dictionaryItem = await appDbContext.DictionaryItems
+        var word = await appDbContext.Words
             .Where(item =>
                 item.Dictionary.UserId == session.UserId &&
                 item.Id == command.Id &&
                 item.Deleted == null)
             .FirstOrDefaultAsync(cancellation);
 
-        if (dictionaryItem == null) 
-            return DictionaryItemErrors.NotFound(command.Id);
+        if (word == null) 
+            return WordErrors.NotFound(command.Id);
 
-        dictionaryItem.Deleted = DateTime.UtcNow;
+        word.Deleted = DateTime.UtcNow;
 
         await appDbContext.SaveChangesAsync(cancellation);
         return Result.Success();

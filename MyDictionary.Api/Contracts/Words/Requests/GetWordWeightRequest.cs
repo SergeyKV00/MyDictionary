@@ -2,7 +2,7 @@
 
 namespace MyDictionary.Api.Contracts.DictionaryItems.Requests;
 
-public record GetDictionaryItemWeightRequest(
+public record GetWordWeightRequest(
     Guid DictionaryId, 
     WeightAggregateType WeightAggregate
 );

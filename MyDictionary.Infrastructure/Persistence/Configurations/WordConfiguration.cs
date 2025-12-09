@@ -5,9 +5,9 @@ using MyDictionary.Infrastructure.Persistence.Abstracts;
 
 namespace MyDictionary.Infrastructure.Persistence.Configurations;
 
-public class DictionaryItemConfiguration : EntityConfiguration<DictionaryItem>
+public class WordConfiguration : EntityConfiguration<Word>
 {
-    public override void Configure(EntityTypeBuilder<DictionaryItem> builder)
+    public override void Configure(EntityTypeBuilder<Word> builder)
     {
         base.Configure(builder);
 

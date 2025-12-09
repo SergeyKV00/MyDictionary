@@ -6,19 +6,19 @@ using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Queries;
 
-public record GetDictionaryItemQuery(
+public record GetWordQuery(
     Guid Id,
     bool IsIncludeExample = false,
     bool IsIncludeWordForm = false
-) : IQuery<DictionaryItem>
+) : IQuery<Word>
 {
     public class Handler(IAppDbContext dbContext)
-        : IQueryHandler<GetDictionaryItemQuery, DictionaryItem>
+        : IQueryHandler<GetWordQuery, Word>
     {
-        public async Task<Result<DictionaryItem>> Handle(GetDictionaryItemQuery query,
+        public async Task<Result<Word>> Handle(GetWordQuery query,
             CancellationToken cancellation)
         {
-            var queryable = dbContext.DictionaryItems
+            var queryable = dbContext.Words
                 .AsNoTracking()
                 .AsQueryable();
 
@@ -34,7 +34,7 @@ public record GetDictionaryItemQuery(
                 .FirstOrDefaultAsync(d => d.Id == query.Id, cancellation);
 
             if (item == null)
-                return DictionaryItemErrors.NotFound(query.Id);
+                return WordErrors.NotFound(query.Id);
 
             return item;
         }

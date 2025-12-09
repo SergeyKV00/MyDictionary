@@ -36,7 +36,7 @@ internal class SearchAcrosssUserDictionariesQueryListHandler(
                         di.Term.Contains(query.Term))
                     .OrderByDescending(di => di.Weight)
                     .Take(3)
-                    .Select(di => new DictionaryItemDto
+                    .Select(di => new WordDto
                     {
                         Id = di.Id,
                         Term = di.Term,
@@ -59,7 +59,7 @@ internal class SearchAcrosssUserDictionariesQueryListHandler(
             .Where(r => r.Matches.Count > 0)
             .Select(r => r.DictionaryId);
 
-        var weights = await dbContex.DictionaryItems
+        var weights = await dbContex.Words
             .AsNoTracking()
             .Where(di =>
                 dictionaryWithMatchesIds.Contains(di.DictionaryId) &&

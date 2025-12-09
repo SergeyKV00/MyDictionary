@@ -8,43 +8,43 @@ using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Application.Services.DictionaryItems.Commands;
 
-public record UpdateDictionaryItemCommand(
+public record UpdateWordCommand(
     Guid Id,
     string? Term,
     string? Meaning,
     int? Weight
 ) : ICommand<Guid>;
 
-internal class UpdateDictionaryItemCommandHander(
+internal class UpdateWordCommandHander(
     IAppDbContext appDbContext,
     SessionContext session
-) : ICommandHandler<UpdateDictionaryItemCommand, Guid>
+) : ICommandHandler<UpdateWordCommand, Guid>
 {
-    public async Task<Result<Guid>> Handle(UpdateDictionaryItemCommand command,
+    public async Task<Result<Guid>> Handle(UpdateWordCommand command,
         CancellationToken cancellation)
     {
-        var dictionaryItem = await appDbContext.DictionaryItems
+        var word = await appDbContext.Words
             .Where(item => 
                 item.Dictionary.UserId == session.UserId &&
                 item.Id == command.Id
             )
             .FirstOrDefaultAsync(cancellation);
 
-        if (dictionaryItem == null)
-            return DictionaryItemErrors.NotFound(command.Id);
+        if (word == null)
+            return WordErrors.NotFound(command.Id);
 
-        if (command.Term != null) dictionaryItem.Term = command.Term;
-        if (command.Meaning != null) dictionaryItem.Meaning = command.Meaning;
-        if (command.Weight != null) dictionaryItem.Weight = command.Weight.Value;
+        if (command.Term != null) word.Term = command.Term;
+        if (command.Meaning != null) word.Meaning = command.Meaning;
+        if (command.Weight != null) word.Weight = command.Weight.Value;
 
         await appDbContext.SaveChangesAsync(cancellation);
-        return dictionaryItem.Id;
+        return word.Id;
     }
 }
 
-public class UpdateDictionaryItemCommandValidator : AbstractValidator<UpdateDictionaryItemCommand>
+public class UpdateWordCommandValidator : AbstractValidator<UpdateWordCommand>
 {
-    public UpdateDictionaryItemCommandValidator()
+    public UpdateWordCommandValidator()
     {
         RuleFor(command => command.Id).NotEqual(Guid.Empty);
 
