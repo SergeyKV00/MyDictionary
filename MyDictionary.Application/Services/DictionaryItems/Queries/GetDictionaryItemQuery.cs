@@ -8,7 +8,8 @@ namespace MyDictionary.Application.Services.DictionaryItems.Queries;
 
 public record GetDictionaryItemQuery(
     Guid Id,
-    bool IsIncludeExample = false
+    bool IsIncludeExample = false,
+    bool IsIncludeWordForm = false
 ) : IQuery<DictionaryItem>
 {
     public class Handler(IAppDbContext dbContext)
@@ -17,12 +18,17 @@ public record GetDictionaryItemQuery(
         public async Task<Result<DictionaryItem>> Handle(GetDictionaryItemQuery query,
             CancellationToken cancellation)
         {
-            var queryable = dbContext.DictionaryItems.AsQueryable();
+            var queryable = dbContext.DictionaryItems
+                .AsNoTracking()
+                .AsQueryable();
 
             if (query.IsIncludeExample)
                 queryable = queryable.Include(d =>
                     d.Examples.Where(d => d.Deleted == null)
                 );
+
+            if (query.IsIncludeWordForm)
+                queryable = queryable.Include(d => d.WordForm);
 
             var item = await queryable
                 .FirstOrDefaultAsync(d => d.Id == query.Id, cancellation);

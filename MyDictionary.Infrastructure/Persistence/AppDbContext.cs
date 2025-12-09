@@ -5,6 +5,7 @@ using MyDictionary.Domain.Modules.DictionaryItemExamples;
 using MyDictionary.Domain.Modules.DictionaryItems;
 using MyDictionary.Domain.Modules.UserDictionaries;
 using MyDictionary.Domain.Modules.Users;
+using MyDictionary.Domain.Modules.WordForms;
 using System.Reflection;
 
 namespace MyDictionary.Infrastructure.Persistence;
@@ -15,6 +16,7 @@ public class AppDbContext : DbContext, IAppDbContext
     public DbSet<UserDictionary> UserDictionaries { get; set; }
     public DbSet<DictionaryItem> DictionaryItems { get; set; }
     public DbSet<DictionaryItemExample> DictionaryItemExamples { get; set; }
+    public DbSet<WordForm> WordForms { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

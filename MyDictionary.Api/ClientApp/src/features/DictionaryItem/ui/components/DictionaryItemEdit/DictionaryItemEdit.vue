@@ -11,6 +11,7 @@ import { ref } from 'vue';
 import { t } from '@/locales/i18';
 import { useLayoutStore } from '@/stores/layoutStore';
 import DictionaryItemExamplesEdit from './DictionaryItemExamplesEdit.vue';
+import WordFormEdit from './WordFormEdit.vue';
 
 const itemStore = useDictionaryItemStore();
 const layoutStore = useLayoutStore();
@@ -21,6 +22,8 @@ const emit = defineEmits<{
 }>()
 
 const exampleEditRef = ref();
+const wordFormRef = ref();
+
 const drawerVisible = ref(false);
 const activeNames = ref("examples");
 const item = ref<DictionaryItemType>(createEmptyItem());
@@ -64,9 +67,12 @@ function onSave() {
     .then((itemId) => {
       if (itemId != null) {
         item.value.id = itemId;
-        return exampleEditRef.value.saveExamples(itemId, item.value.examples);
-      }
         
+        return Promise.all([
+          exampleEditRef.value?.saveExamples(itemId, item.value.examples),
+          wordFormRef.value?.saveWordForm(itemId)
+        ])
+      }
     })
     .then(() => {
       close();
@@ -89,15 +95,6 @@ function close() {
   emit('close');
   layoutStore.showSidebar();
 }
-
-// TEMP
-const verbForms = ref([
-  {
-    infinitive: "take ",
-    pastSimple: "took",
-    pastParticiple: "taken"
-  }
-]);
 
 defineExpose({ open });
 </script>
@@ -124,11 +121,7 @@ defineExpose({ open });
 
         <el-collapse v-model="activeNames" expand-icon-position="left">
           <el-collapse-item title="Формы глагола" name="wordForms">
-              <el-table :data="verbForms" border style="width: 100%">
-                <el-table-column prop="infinitive" label="Infinitive" />
-                <el-table-column prop="pastSimple" label="Past Simple" />
-                <el-table-column prop="pastParticiple" label="Past Participle" />
-              </el-table>
+            <WordFormEdit ref="wordFormRef" :wordForm="item.wordForm"/>
           </el-collapse-item>
           <el-collapse-item title="Примеры" name="examples">
             <DictionaryItemExamplesEdit ref="exampleEditRef" :item="item" :examples="item.examples"/>

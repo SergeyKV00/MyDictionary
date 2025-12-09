@@ -1,4 +1,5 @@
 ﻿using MyDictionary.Api.Contracts.DictionaryItemExample.Responses;
+using MyDictionary.Api.Contracts.WordForms.Responses;
 using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Api.Contracts.DictionaryItems.Responses;
@@ -8,7 +9,8 @@ public record DictionaryItemResponse(
     string Term,
     string Meaning,
     int Weight,
-    List<DictionaryItemExampleListResponse> Examples
+    List<DictionaryItemExampleListResponse> Examples,
+    WordFormResponse? WordForm
 )
 {
     public static DictionaryItemResponse MapFrom(DictionaryItem model)
@@ -18,7 +20,8 @@ public record DictionaryItemResponse(
             Term: model.Term,
             Meaning: model.Meaning,
             Weight: model.Weight,
-            Examples: [..model.Examples?.Select(DictionaryItemExampleListResponse.MapFrom) ?? []]
+            Examples: [..model.Examples?.Select(DictionaryItemExampleListResponse.MapFrom) ?? []],
+            WordForm: WordFormResponse.Map(model.WordForm)
         );
     }
 }

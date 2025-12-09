@@ -33,7 +33,8 @@ public class DictionaryItemsController : BaseController
     {
         var query = new GetDictionaryItemQuery(
             Id: request.Id,
-            IsIncludeExample: request.IsIncludeExample
+            IsIncludeExample: request.IsIncludeExample,
+            IsIncludeWordForm: request.IsIncludeWordForm
         );
         return await Send(query, DictionaryItemResponse.MapFrom);
     }

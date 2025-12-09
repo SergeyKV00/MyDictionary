@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyDictionary.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MyDictionary.Infrastructure.Persistence;
 namespace MyDictionary.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251208153510_Add_Entity_WordForm")]
+    partial class Add_Entity_WordForm
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,10 +190,9 @@ namespace MyDictionary.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DictionaryItemId")
-                        .IsUnique();
+                    b.HasIndex("DictionaryItemId");
 
-                    b.ToTable("WordForms");
+                    b.ToTable("WordForm");
                 });
 
             modelBuilder.Entity("MyDictionary.Domain.Modules.DictionaryItemExamples.DictionaryItemExample", b =>
@@ -229,8 +231,8 @@ namespace MyDictionary.Infrastructure.Migrations
             modelBuilder.Entity("MyDictionary.Domain.Modules.WordForms.WordForm", b =>
                 {
                     b.HasOne("MyDictionary.Domain.Modules.DictionaryItems.DictionaryItem", "DictionaryItem")
-                        .WithOne("WordForm")
-                        .HasForeignKey("MyDictionary.Domain.Modules.WordForms.WordForm", "DictionaryItemId")
+                        .WithMany("Forms")
+                        .HasForeignKey("DictionaryItemId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -241,7 +243,7 @@ namespace MyDictionary.Infrastructure.Migrations
                 {
                     b.Navigation("Examples");
 
-                    b.Navigation("WordForm");
+                    b.Navigation("Forms");
                 });
 
             modelBuilder.Entity("MyDictionary.Domain.Modules.UserDictionaries.UserDictionary", b =>
