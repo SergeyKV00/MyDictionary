@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MyDictionary.Application.Common.Behaviors;
 using MyDictionary.Domain.Modules.UserDictionaries;
+using MyDictionary.Domain.Modules.WordProgresses;
 using System.Reflection;
 
 namespace MyDictionary.Application
@@ -12,6 +13,7 @@ namespace MyDictionary.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IUserDictionaryService, UserDictionaryService>();
+            services.AddTransient<IWordProgressService, WordProgressService>();
 
             services.AddMediatR(cfg =>
             {

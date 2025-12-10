@@ -9,7 +9,8 @@ namespace MyDictionary.Application.Services.DictionaryItems.Queries;
 public record GetDictionaryItemQuery(
     Guid Id,
     bool IsIncludeExample = false,
-    bool IsIncludeWordForm = false
+    bool IsIncludeWordForm = false,
+    bool IsIncludeWordProgress = false
 ) : IQuery<DictionaryItem>
 {
     public class Handler(IAppDbContext dbContext)
@@ -27,14 +28,29 @@ public record GetDictionaryItemQuery(
                     d.Examples.Where(d => d.Deleted == null)
                 );
 
-            if (query.IsIncludeWordForm)
-                queryable = queryable.Include(d => d.WordForm);
+            //if (query.IsIncludeWordForm)
+            //    queryable = queryable.Include(d => d.WordForm);
 
             var item = await queryable
                 .FirstOrDefaultAsync(d => d.Id == query.Id, cancellation);
 
             if (item == null)
                 return DictionaryItemErrors.NotFound(query.Id);
+
+            if (query.IsIncludeWordForm)
+            {
+                item.WordForm = await dbContext.WordForms.FirstOrDefaultAsync(d =>
+                    d.DictionaryItemId == item.Id 
+                    && d.Deleted == null
+                , cancellation);
+            }
+            if (query.IsIncludeWordProgress)
+            {
+                item.WordProgress = await dbContext.WordProgresses.FirstOrDefaultAsync(d =>
+                    d.DictionaryItemId == item.Id
+                    && d.Deleted == null
+                , cancellation);
+            }
 
             return item;
         }

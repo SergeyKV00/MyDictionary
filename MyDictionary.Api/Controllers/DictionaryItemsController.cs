@@ -22,7 +22,8 @@ public class DictionaryItemsController : BaseController
             SortField: request.SortField,
             SortOrder: request.SortOrder,
             Page: request.Page,
-            PageSize: request.PageSize
+            PageSize: request.PageSize,
+            IsIncludeWordProgress: request.IsIncludeWordProgress
         );
 
         return await Send(query, DictionaryItemListResponse.MapFrom);
@@ -34,7 +35,8 @@ public class DictionaryItemsController : BaseController
         var query = new GetDictionaryItemQuery(
             Id: request.Id,
             IsIncludeExample: request.IsIncludeExample,
-            IsIncludeWordForm: request.IsIncludeWordForm
+            IsIncludeWordForm: request.IsIncludeWordForm,
+            IsIncludeWordProgress: request.IsIncludeWordProgress
         );
         return await Send(query, DictionaryItemResponse.MapFrom);
     }

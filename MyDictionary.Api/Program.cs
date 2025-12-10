@@ -1,3 +1,4 @@
+using FSRS.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MyDictionary.Api.Extensions;
@@ -10,6 +11,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
+builder.Services.AddFSRS();
 builder.Services.AddInfrastructure(config);
 builder.Services.AddApplication();
 builder.Services

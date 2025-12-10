@@ -1,4 +1,5 @@
-﻿using MyDictionary.Domain.Modules.DictionaryItems;
+﻿using MyDictionary.Api.Contracts.DictionaryItems.Responses;
+using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Api.Contracts.DictionaryItems;
 
@@ -6,7 +7,8 @@ public record DictionaryItemListResponse(
     Guid Id,
     string Term,
     string Meaning,
-    int Weight
+    int Weight,
+    WordProgressResponse? WordProgress // TODO Времено
 )
 {
     public static DictionaryItemListResponse MapFrom(DictionaryItem model)
@@ -15,7 +17,8 @@ public record DictionaryItemListResponse(
             Id: model.Id,
             Term: model.Term,
             Meaning: model.Meaning,
-            Weight: model.Weight
+            Weight: model.Weight,
+            WordProgress: WordProgressResponse.Map(model.WordProgress)
         );
     }
 }

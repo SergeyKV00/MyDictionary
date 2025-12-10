@@ -3,5 +3,6 @@
 public record GetDictionaryItemRequest(
     Guid Id,
     bool IsIncludeExample = false,
-    bool IsIncludeWordForm = true
+    bool IsIncludeWordForm = true,
+    bool IsIncludeWordProgress = true
 );
