@@ -14,6 +14,17 @@ public static class QueryableExtensions
         return queryable;
     }
 
+    public static IQueryable<T> ApplyIf<T>(
+        this IQueryable<T> source,
+        bool condition,
+        Func<IQueryable<T>, IQueryable<T>> transform)
+    {
+        if (condition)
+            return transform(source);
+
+        return source;
+    }
+
     public static IQueryable<T> WhereIfHasKey<T>(
         this IQueryable<T> queryable,
         Guid? value,

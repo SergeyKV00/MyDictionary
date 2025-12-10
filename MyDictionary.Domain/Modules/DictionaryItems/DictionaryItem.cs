@@ -3,6 +3,7 @@ using MyDictionary.Domain.Interfaces;
 using MyDictionary.Domain.Modules.DictionaryItemExamples;
 using MyDictionary.Domain.Modules.UserDictionaries;
 using MyDictionary.Domain.Modules.WordForms;
+using MyDictionary.Domain.Modules.WordProgresses;
 
 namespace MyDictionary.Domain.Modules.DictionaryItems;
 
@@ -18,4 +19,5 @@ public class DictionaryItem : Entity, IAuditable
 
     public ICollection<DictionaryItemExample> Examples { get; set; } = [];
     public WordForm? WordForm { get; set; }
+    public WordProgress? WordProgress { get; set; }
 }

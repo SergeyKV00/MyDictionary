@@ -9,5 +9,6 @@ public record GetDictionaryItemListRequest(
     string? SortField,
     string? SortOrder,
     int Page,
-    int PageSize
+    int PageSize,
+    bool IsIncludeWordProgress = false
 ) : IPageRequest;

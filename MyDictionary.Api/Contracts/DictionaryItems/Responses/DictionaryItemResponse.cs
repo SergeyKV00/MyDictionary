@@ -10,7 +10,8 @@ public record DictionaryItemResponse(
     string Meaning,
     int Weight,
     List<DictionaryItemExampleListResponse> Examples,
-    WordFormResponse? WordForm
+    WordFormResponse? WordForm,
+    WordProgressResponse? WordProgress // TODO Времено
 )
 {
     public static DictionaryItemResponse MapFrom(DictionaryItem model)
@@ -21,7 +22,8 @@ public record DictionaryItemResponse(
             Meaning: model.Meaning,
             Weight: model.Weight,
             Examples: [..model.Examples?.Select(DictionaryItemExampleListResponse.MapFrom) ?? []],
-            WordForm: WordFormResponse.Map(model.WordForm)
+            WordForm: WordFormResponse.Map(model.WordForm),
+            WordProgress: WordProgressResponse.Map(model.WordProgress)
         );
     }
 }
