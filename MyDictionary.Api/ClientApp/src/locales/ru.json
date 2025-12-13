@@ -5,11 +5,17 @@
         "Cancel": "Отмена",
         "Edit": "Редактировать",
         "Edit_2": "Изменить",
+        "Add": "Добавить",
         "Delete": "Удалить",
+        "Yes": "Да",
+        "No": "Нет",
         "Editing": "Редактирование",
         "Creating": "Создание",
+        "Create": "Создать",
         "SaveSuccess": "Сохранено успешно",
-        "DeleteSuccess": "Удаленно успешно"
+        "DeleteSuccess": "Удаленно успешно",
+        "Select": "Выбрать",
+        "DeleteConfirm": "Вы уверены, что хотите удалить?"
     },
     "Auth": {
         "WelcomeBack": "С возвращением",
@@ -32,5 +38,24 @@
     },
     "Example": {
         "Add": "Добавить пример"
+    },
+    "StudyDeck": {
+        "Name": "Название",
+        "Description": "Описание",
+        "CreateTitle": "Создать колоду",
+        "Validation": {
+            "NameRequired": "Пожалуйста, введите название",
+            "NameLength": "Длина должна быть от 1 до 500",
+            "DescriptionLength": "Длина должна быть менее 2000"
+        },
+        "NoDescription": "Нет описания",
+        "Settings": "Настройки колоды",
+        "Binding": "Связывание",
+        "AddWords": "Добавить слова",
+        "SelectDictionary": "Выберите словарь",
+        "SelectWords": "Выберите слова",
+        "Synchronize": "Синхронизировать",
+        "Term": "Термин",
+        "Definition": "Определение"
     }
 }

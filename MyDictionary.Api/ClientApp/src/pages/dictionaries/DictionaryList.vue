@@ -218,7 +218,7 @@ onMounted(async () => {
 }
 .dictionary-card {
   cursor: pointer;
-  border-bottom: 5px solid transparent;
+  border-bottom: 5px solid var(--el-border-color-light);
 }
 .dictionary-card__body { 
   width: 400px;

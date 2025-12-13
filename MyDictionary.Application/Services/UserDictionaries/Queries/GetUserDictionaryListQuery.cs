@@ -9,7 +9,8 @@ namespace MyDictionary.Application.Services.UserDictionaries.Queries;
 
 public record GetUserDictionaryListQuery(
     Guid UserId,
-    bool IsIncludeItems
+    bool IsIncludeItems,
+    List<Guid>? Ids = null
 ) : IQuery<ListModel<UserDictionary>>;
 
 internal class GetUserDictionaryListQueryHandler(IAppDbContext dbContext)
@@ -22,7 +23,8 @@ internal class GetUserDictionaryListQueryHandler(IAppDbContext dbContext)
         var queryable = dbContext.UserDictionaries
             .Where(d =>
                 d.UserId == query.UserId &&
-                d.Deleted == null);
+                d.Deleted == null)
+            .WhereIf(query.Ids?.Count > 0, x => query.Ids!.Contains(x.Id));
 
         if (query.IsIncludeItems)
             queryable = queryable.Include(d => d.Items);

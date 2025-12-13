@@ -15,11 +15,15 @@ class DictionaryService {
     async create(request: CreateDictionaryRequest) {
         await Api.post(`/${endpoint}/Create`, request);
     }
+    async get(id: string) {
+        const response = await Api.get<DictionaryDto>(`/${endpoint}/Get?id=${id}`);
+        return response;
+    }
     async delete(dictionaryId: string) {
         await Api.delete(`/${endpoint}/Delete?id=${dictionaryId}`);
     }
     async searchAcross(term: string | null) {
-        const response = await Api.post<unknown[]>(`/${endpoint}/SearchAcross`, {term});
+        const response = await Api.post<unknown[]>(`/${endpoint}/SearchAcross`, { term });
         return response;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyDictionary.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MyDictionary.Infrastructure.Persistence;
 namespace MyDictionary.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251213140228_Add_StudyDeck")]
+    partial class Add_StudyDeck
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,7 +128,7 @@ namespace MyDictionary.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("StudyDecks");
+                    b.ToTable("StudyDeck");
                 });
 
             modelBuilder.Entity("MyDictionary.Domain.Modules.StudyDecks.StudyDeckDictionary", b =>
@@ -144,9 +147,6 @@ namespace MyDictionary.Infrastructure.Migrations
                     b.Property<Guid>("DictionaryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsSynchronized")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("StudyDeckId")
                         .HasColumnType("uniqueidentifier");
 
@@ -156,7 +156,7 @@ namespace MyDictionary.Infrastructure.Migrations
 
                     b.HasIndex("StudyDeckId");
 
-                    b.ToTable("StudyDeckDictionaries");
+                    b.ToTable("StudyDeckDictionary");
                 });
 
             modelBuilder.Entity("MyDictionary.Domain.Modules.StudyDecks.StudyDeckWord", b =>
@@ -184,7 +184,7 @@ namespace MyDictionary.Infrastructure.Migrations
 
                     b.HasIndex("StudyDeckId");
 
-                    b.ToTable("StudyDeckWords");
+                    b.ToTable("StudyDeckWord");
                 });
 
             modelBuilder.Entity("MyDictionary.Domain.Modules.UserDictionaries.UserDictionary", b =>

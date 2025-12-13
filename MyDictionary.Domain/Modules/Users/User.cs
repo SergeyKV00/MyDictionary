@@ -14,5 +14,6 @@ public class User : Entity, IAuditable
     public DateTime? Deleted { get; set; }
 
     public ICollection<UserDictionary> Dictionaries { get; set; }
+    public ICollection<StudyDecks.StudyDeck> StudyDecks { get; set; } = [];
     public ICollection<WordProgress> WordProgresses { get; set; }
 }

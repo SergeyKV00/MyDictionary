@@ -12,5 +12,34 @@
     },
     "Errors": {
         "ValidationError": "Validation error"
+    },
+    "Common": {
+        "Cancel": "Cancel",
+        "Create": "Create",
+        "Add": "Add",
+        "Save": "Save",
+        "Yes": "Yes",
+        "No": "No",
+        "Select": "Select",
+        "DeleteConfirm": "Are you sure you want to delete?"
+    },
+    "StudyDeck": {
+        "Name": "Name",
+        "Description": "Description",
+        "CreateTitle": "Create Study Deck",
+        "Validation": {
+            "NameRequired": "Please input name",
+            "NameLength": "Length should be 1 to 500",
+            "DescriptionLength": "Length should be less than 2000"
+        },
+        "NoDescription": "No description",
+        "Settings": "Deck Settings",
+        "Binding": "Binding",
+        "AddWords": "Add Words",
+        "SelectDictionary": "Select Dictionary",
+        "SelectWords": "Select Words",
+        "Synchronize": "Synchronize",
+        "Term": "Term",
+        "Definition": "Definition"
     }
 }

@@ -18,6 +18,7 @@ public class DictionaryItem : Entity, IAuditable
     public DateTime? Deleted { get; set; }
 
     public ICollection<DictionaryItemExample> Examples { get; set; } = [];
+    public ICollection<StudyDecks.StudyDeckWord> StudyDeckWords { get; set; } = [];
     public WordForm? WordForm { get; set; }
     public WordProgress? WordProgress { get; set; }
 }

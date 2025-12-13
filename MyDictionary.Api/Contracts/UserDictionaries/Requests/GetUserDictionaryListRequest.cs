@@ -1,5 +1,6 @@
 ﻿namespace MyDictionary.Api.Contracts.UserDictionaries.Requests;
 
 public record GetUserDictionaryListRequest(
-    bool IsIncludeItems = false
+    bool IsIncludeItems = false,
+    List<Guid>? Ids = null
 );

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyDictionary.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MyDictionary.Infrastructure.Persistence;
 namespace MyDictionary.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251213144601_Add_DbContex_StudyDecks")]
+    partial class Add_DbContex_StudyDecks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,9 +146,6 @@ namespace MyDictionary.Infrastructure.Migrations
 
                     b.Property<Guid>("DictionaryId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsSynchronized")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("StudyDeckId")
                         .HasColumnType("uniqueidentifier");

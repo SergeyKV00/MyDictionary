@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, computed, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useDictionaryItemStore } from '../store/DictionaryItemStore';
+import DictionaryService from '@/services/dictionary';
 import { CirclePlus, Delete, Edit } from '@element-plus/icons-vue' 
 import { DictionaryItemType } from '../types/models/DictionaryItemType';
 import { NotificationService } from '@/services/notification';
@@ -33,7 +35,18 @@ const filters = ref<DictionaryItemListRequest>({
   sortOrder: "desc"
 })
 
+const route = useRoute();
+
 onMounted(async() => {
+  const dictionaryId = route.query.dictionaryId as string;
+  if (dictionaryId) {
+      const response = await DictionaryService.get(dictionaryId);
+      if (response?.data) {
+          itemStore.setDictionary(response.data);
+          filters.value.dictionaryId = response.data.id;
+      }
+  }
+
   itemStore.query.pageSize = 7;
   await fetchItems();
   await itemStore.aggregateWeightAll();

@@ -19,7 +19,8 @@ public class UserDictionariesController(SessionContext session) : BaseController
     {
         var query = new GetUserDictionaryListQuery(
             UserId: session.UserId,
-            IsIncludeItems: request.IsIncludeItems
+            IsIncludeItems: request.IsIncludeItems,
+            Ids: request.Ids
         );
         return await Send(query, UserDictionaryListResponse.From);
     }

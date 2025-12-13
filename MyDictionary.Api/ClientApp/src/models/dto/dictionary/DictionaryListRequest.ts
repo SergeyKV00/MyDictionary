@@ -1,3 +1,4 @@
 export interface DictionaryListRequest {
-    isIncludeItems: boolean
+    isIncludeItems: boolean,
+    ids?: string[]
 }
