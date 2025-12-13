@@ -1,4 +1,4 @@
-using FSRS.Extensions;
+using FSRS.Core.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using MyDictionary.Api.Extensions;
@@ -11,7 +11,11 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-builder.Services.AddFSRS();
+builder.Services.AddFSRS(options =>
+{
+    options.DesiredRetention = 0.9;
+    options.MaximumInterval = 365;
+});
 builder.Services.AddInfrastructure(config);
 builder.Services.AddApplication();
 builder.Services

@@ -1,4 +1,4 @@
-﻿using FSRS.Constants;
+﻿using FSRS.Core.Enums;
 
 namespace MyDictionary.Api.Contracts.WordProgresses.Requests;
 

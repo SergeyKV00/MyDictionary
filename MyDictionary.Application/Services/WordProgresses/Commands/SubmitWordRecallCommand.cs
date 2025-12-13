@@ -1,4 +1,4 @@
-﻿using FSRS.Constants;
+﻿using FSRS.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Interfaces.Messaging;
 using MyDictionary.Application.Interfaces.Persistence;

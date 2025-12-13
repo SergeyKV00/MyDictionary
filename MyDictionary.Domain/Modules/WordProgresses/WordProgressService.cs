@@ -1,38 +1,37 @@
-﻿using FSRS.Constants;
-using FSRS.Interfaces;
+﻿using FSRS.Core.Enums;
+using FSRS.Core.Interfaces;
+using FSRS.Core.Models;
 
 namespace MyDictionary.Domain.Modules.WordProgresses;
 
 public class WordProgressService : IWordProgressService
 {
-    private readonly IScheduler scheduler;
+    private readonly IScheduler _scheduler;
 
     public WordProgressService(IScheduler scheduler)
     {
-        this.scheduler = scheduler;
+        _scheduler = scheduler;
     }
 
     public void ApplyReview(WordProgress wordProgress, Rating rating)
     {
-        scheduler.Review(wordProgress, rating, wordProgress.NextReview);
+        var card = new Card(
+            state: wordProgress.State,
+            stability: wordProgress.Stability,
+            difficulty: wordProgress.Difficulty,
+            due: wordProgress.NextReview,
+            lastReview: wordProgress.LastReview
+        );
+
+        var (updateCard, reviewLog) = _scheduler.ReviewCard(card, rating);
+
+        if (updateCard != null)
+        {
+            wordProgress.State = updateCard.State;
+            wordProgress.Stability = updateCard.Stability;
+            wordProgress.Difficulty = updateCard.Difficulty;
+            wordProgress.NextReview = updateCard.Due;
+            wordProgress.LastReview = updateCard.LastReview;
+        }
     }
-
-    //public void ApplyReview(WordProgress wp, Rating quality)
-    //{
-    //    wp.EaseFactor = Math.Max(1.3,
-    //        wp.EaseFactor + (0.1 - (5 - (int)quality) * (0.08 + (5 - (int)quality) * 0.02)));
-
-    //    if (quality == Rating.Forgot)
-    //        wp.Stage = 0;
-
-    //    wp.IntervalDays = wp.Stage switch
-    //    {
-    //        0 => 1,
-    //        1 => 3,
-    //        _ => (int)Math.Round(wp.IntervalDays * wp.EaseFactor),
-    //    };
-
-    //    wp.Stage++;
-    //    wp.NextReview = DateTime.Today.AddDays(wp.IntervalDays).AddHours(6);
-    //}
 }

@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="ClientApp\" />
-    <Folder Include="Contracts\WordProgresses\Responses\" />
   </ItemGroup>
 
 </Project>

@@ -1,25 +1,28 @@
-﻿using FSRS.Constants;
+﻿using FSRS.Core.Enums;
 using MyDictionary.Domain.Modules.WordProgresses;
 
-namespace MyDictionary.Api.Contracts.DictionaryItems.Responses;
+namespace MyDictionary.Api.Contracts.WordProgresses.Responses;
 
 public class WordProgressResponse
 {
     public Guid UserId { get; set; }
     public Guid DictionaryItemId { get; set; }
     
-    public CardState State { get; set; }
+    public State State { get; set; }
     public DateTime? LastReview {  get; set; }
     public DateTime NextReview { get; set; }
-    public int IntervalDays => GetIntervalDays();
+    public double? Stability { get; set; }
+    public double? Difficulty { get; set; }
+    public int Retention => GetRetention();
 
-    private int GetIntervalDays()
+    private int GetRetention()
     {
-        if (LastReview == null)return 0;
+        double t = (DateTime.UtcNow.AddDays(5) - (LastReview ?? DateTime.UtcNow)).TotalDays;
+        double S = Stability ?? 0;
+        double retention = Math.Pow(2, -t / S);
 
-        var interval = (NextReview - LastReview.Value).TotalDays;
-
-        return Math.Max(0, (int)Math.Round(interval));
+        double percent = retention * 100;
+        return Convert.ToInt32(Math.Clamp(percent, 0, 100));
     }
 
     public static WordProgressResponse? Map(WordProgress? model)
@@ -33,6 +36,8 @@ public class WordProgressResponse
             State = model.State,
             LastReview = model.LastReview,
             NextReview = model.NextReview,
+            Stability = model.Stability,
+            Difficulty = model.Difficulty,
         };
     }
 }

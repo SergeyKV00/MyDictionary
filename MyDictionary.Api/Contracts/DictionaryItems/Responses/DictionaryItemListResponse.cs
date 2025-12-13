@@ -1,4 +1,4 @@
-﻿using MyDictionary.Api.Contracts.DictionaryItems.Responses;
+﻿using MyDictionary.Api.Contracts.WordProgresses.Responses;
 using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Api.Contracts.DictionaryItems;

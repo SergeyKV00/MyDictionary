@@ -1,5 +1,6 @@
 ﻿using MyDictionary.Api.Contracts.DictionaryItemExample.Responses;
 using MyDictionary.Api.Contracts.WordForms.Responses;
+using MyDictionary.Api.Contracts.WordProgresses.Responses;
 using MyDictionary.Domain.Modules.DictionaryItems;
 
 namespace MyDictionary.Api.Contracts.DictionaryItems.Responses;

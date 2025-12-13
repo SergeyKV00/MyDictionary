@@ -1,4 +1,4 @@
-﻿using FSRS.Constants;
+﻿using FSRS.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using MyDictionary.Application.Interfaces.Messaging;
 using MyDictionary.Application.Interfaces.Persistence;
@@ -45,7 +45,7 @@ internal class CreateWordProgressCommandHandler(
             UserId = session.UserId,
             DictionaryItemId = command.DictionaryItemId,
             NextReview = DateTime.UtcNow,
-            State = CardState.New
+            State = State.Learning
         };
 
         dbContext.WordProgresses.Add(wordProgress);
